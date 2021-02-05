@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hangcc.automaticpunchxust.dao.AutomaticPunch.UserInfoDao">
+
+    <resultMap type="cn.hangcc.automaticpunchxust.domain.dto.AutomaticPunch.UserInfoDO" id="resultMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="schoolId" column="school_id" jdbcType="INTEGER"/>
+        <result property="userUrl" column="user_url" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="INTEGER"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="gender" column="gender" jdbcType="VARCHAR"/>
+        <result property="className" column="class" jdbcType="VARCHAR"/>
+        <result property="college" column="college" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="updated" column="updated" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into automatic_punch_xust.automatic_punch_user_info_table(school_id, user_url, name, phone, email, gender, class_name,
+                                                                         college, status, created, updated)
+        values (#{schoolId}, #{userUrl},#{name}, #{phone}, #{email}, #{gender}, #{className}, #{college}, #{status}, #{created},
+                #{updated})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update automatic_punch_user_info_table
+        <set>
+            <if test="schoolId != null">
+                school_id = #{schoolId},
+            </if>
+            <if test="userUrl != null">
+                user_url = #{userUrl}
+            </if>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender},
+            </if>
+            <if test="class != null and class != ''">
+                class = #{class},
+            </if>
+            <if test="college != null and college != ''">
+                college = #{college},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="created != null">
+                created = #{created},
+            </if>
+            <if test="updated != null">
+                updated = #{updated},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>
