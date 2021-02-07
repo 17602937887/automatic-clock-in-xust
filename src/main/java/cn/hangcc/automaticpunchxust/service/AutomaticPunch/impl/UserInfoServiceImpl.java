@@ -23,23 +23,32 @@ public class UserInfoServiceImpl implements UserInfoService {
      * 新增数据
      *
      * @param userInfoModel 实例对象
-     * @return 实例对象
      */
     @Override
-    public UserInfoModel insert(UserInfoModel userInfoModel) {
-        userInfoDao.insert(UserInfoModelConverter.convertToUserInfoDO(userInfoModel));
-        return userInfoModel;
+    public void insert(UserInfoModel userInfoModel) {
+        if ((query(userInfoModel.getSchoolId()) == null)) {
+            userInfoDao.insert(UserInfoModelConverter.convertToUserInfoDO(userInfoModel));
+        } else {
+            userInfoDao.update(UserInfoModelConverter.convertToUserInfoDO(userInfoModel));
+        }
+    }
+
+    /**
+     * 根据学号 查询用户在表中的数据
+     * @param schoolId 学号
+     */
+    @Override
+    public UserInfoModel query(Long schoolId) {
+        return UserInfoModelConverter.convertToUserInfoModel(userInfoDao.query(schoolId));
     }
 
     /**
      * 修改数据
      *
      * @param userInfoModel 实例对象
-     * @return 实例对象
      */
     @Override
-    public UserInfoModel update(UserInfoModel userInfoModel) {
+    public void update(UserInfoModel userInfoModel) {
         userInfoDao.update(UserInfoModelConverter.convertToUserInfoDO(userInfoModel));
-        return userInfoModel;
     }
 }

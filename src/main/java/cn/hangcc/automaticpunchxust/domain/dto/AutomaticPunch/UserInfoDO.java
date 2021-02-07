@@ -25,6 +25,10 @@ public class UserInfoDO implements Serializable {
      */
     private String userUrl;
     /**
+     * 用户的cookie
+     */
+    private String cookie;
+    /**
      * 用户名字
      */
     private String name;
