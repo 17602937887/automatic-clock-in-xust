@@ -36,12 +36,11 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into automatic_punch_xust.automatic_punch_user_info_table(school_id, user_url, cookie, name, phone,
+        insert into automatic_punch_user_info_table(school_id, user_url, cookie, name, phone,
                                                                          email, gender, class_name,
-                                                                         college, status, created, updated)
+                                                                         college, status)
         values (#{schoolId}, #{userUrl}, #{cookie}, #{name}, #{phone}, #{email}, #{gender}, #{className}, #{college},
-                #{status}, #{created},
-                #{updated})
+                #{status})
     </insert>
 
     <!--通过主键修改数据-->
@@ -89,6 +88,6 @@
     </update>
 
     <select id="query" resultMap="resultMap">
-        select <include id="all_column"/> from automatic_punch_user_info_table where school_id = #{schoolId}
+        select <include refid="all_column"/> from automatic_punch_user_info_table where school_id = #{schoolId}
     </select>
 </mapper>

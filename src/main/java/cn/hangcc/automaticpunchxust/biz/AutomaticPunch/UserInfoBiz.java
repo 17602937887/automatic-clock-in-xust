@@ -80,6 +80,7 @@ public class UserInfoBiz {
             Map<String, String> map = (Map<String, String>) JSON.parseObject(jsonResponse).getJSONArray("list").get(0);
             UserInfoModel user = new UserInfoModel();
             setUserInfoAttribute(user, map);
+            user.setCookie(cookie);
             return user;
         } catch (Exception e) {
             log.error("UserInfoBiz.getUserInfo | 根据用户提供的信息获取用户基本信息 url:{}, schoolId:{}, e = ", url, schoolId, e);

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.time.LocalDateTime;
 
 /**
  * 在这里编写类的功能描述
@@ -26,7 +28,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/task")
 public class UserInfoController {
 
     @Resource
@@ -70,9 +72,9 @@ public class UserInfoController {
         }
     }
 
-    private void setUserAttribute(UserInfoModel user, String url, Long schoolId, String email, Integer status) {
+    private void setUserAttribute(UserInfoModel user, String url, Long schoolId, String email, Integer status) throws IOException {
         user.setUserUrl(url);
-        user.setCookie(user.getCookie());
+        user.setSchoolId(schoolId);
         user.setEmail(email);
         user.setStatus(status);
     }

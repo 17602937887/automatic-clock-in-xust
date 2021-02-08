@@ -2,6 +2,8 @@ package cn.hangcc.automaticpunchxust.dao.AutomaticPunch;
 
 import cn.hangcc.automaticpunchxust.domain.dto.AutomaticPunch.UserInfoDO;
 import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * (AutomaticPunchUserInfoTable)表数据库访问层
@@ -9,6 +11,7 @@ import io.lettuce.core.dynamic.annotation.Param;
  * @author chenhang
  * @since 2021-02-05 18:44:44
  */
+@Repository
 public interface UserInfoDao {
     /**
      * 新增数据

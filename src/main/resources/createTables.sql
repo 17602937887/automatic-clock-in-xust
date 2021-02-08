@@ -16,8 +16,8 @@ create table if not exists automatic_punch_user_info_table(
     `class_name` varchar(255) not null comment '用户班级',
     `college` varchar(255) not null comment '用户所在学院',
     `status` int(11) not null default 3 comment '用户状态 1:需要早上签到 2.需要打晚上签到 3.两次都需要 4.用户状态无效',
-    `created` datetime NOT NULL COMMENT '创建时间',
+    `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     unique key uk_school_id(`school_id`) comment '唯一索引 工号',
     key idx_status(`status`) comment '普通索引'
-)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

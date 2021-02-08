@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  # kafka配置
+  kafka:
+    producer:
+      bootstrap-servers: 120.26.160.137:9092 #服务器ip+端口
+
+  # 数据库连接配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://8.210.131.194:3306/automatic_punch_xust #服务器ip mysql端口
+    username: root
+    password: Chh980929...
+
+# mybatis的相关配置
+mybatis:
+  #mapper配置文件
+  mapper-locations: classpath:mapper/*.xml
+  #开启驼峰命名
+  configuration:
+    map-underscore-to-camel-case: true
