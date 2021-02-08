@@ -28,7 +28,8 @@ public class UserInfoModelConverter {
 
         userInfoModel.setId(userInfoDO.getId());
         userInfoModel.setSchoolId(userInfoDO.getSchoolId());
-        userInfoModel.setUserUrl(userInfoModel.getUserUrl());
+        userInfoModel.setUserUrl(userInfoDO.getUserUrl());
+        userInfoModel.setCookie(userInfoDO.getCookie());
         userInfoModel.setName(userInfoDO.getName());
         userInfoModel.setPhone(userInfoDO.getPhone());
         userInfoModel.setEmail(userInfoDO.getEmail());
@@ -56,6 +57,7 @@ public class UserInfoModelConverter {
         userInfoDO.setId(userInfoModel.getId());
         userInfoDO.setSchoolId(userInfoModel.getSchoolId());
         userInfoDO.setUserUrl(userInfoModel.getUserUrl());
+        userInfoDO.setCookie(userInfoModel.getCookie());
         userInfoDO.setName(userInfoModel.getName());
         userInfoDO.setPhone(userInfoModel.getPhone());
         userInfoDO.setEmail(userInfoModel.getEmail());

@@ -16,15 +16,20 @@ public interface UserInfoService {
      * 新增数据
      *
      * @param userInfoModel 实例对象
-     * @return 实例对象
      */
-    UserInfoModel insert(UserInfoModel userInfoModel);
+    void insert(UserInfoModel userInfoModel);
+
+    /**
+     * 根据学号 查询用户在表中的数据
+     * @param schoolId 学号
+     * @return 该用户的基本信息
+     */
+    UserInfoModel query(Long schoolId);
 
     /**
      * 修改数据
      *
      * @param userInfoModel 实例对象
-     * @return 实例对象
      */
-    UserInfoModel update(UserInfoModel userInfoModel);
+    void update(UserInfoModel userInfoModel);
 }
