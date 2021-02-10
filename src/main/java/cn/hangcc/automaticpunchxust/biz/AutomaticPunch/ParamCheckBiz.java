@@ -5,7 +5,6 @@
  */
 package cn.hangcc.automaticpunchxust.biz.AutomaticPunch;
 
-import cn.hangcc.automaticpunchxust.domain.model.AutomaticPunch.UserInfoModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

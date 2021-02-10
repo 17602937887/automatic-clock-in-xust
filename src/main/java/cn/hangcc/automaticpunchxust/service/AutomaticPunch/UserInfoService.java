@@ -1,8 +1,6 @@
 package cn.hangcc.automaticpunchxust.service.AutomaticPunch;
 
-import cn.hangcc.automaticpunchxust.domain.model.AutomaticPunch.UserInfoModel;
-
-import java.util.List;
+import cn.hangcc.automaticpunchxust.domain.model.AutomaticClockIn.UserInfoModel;
 
 /**
  * (AutomaticPunchUserInfoTable)表服务接口

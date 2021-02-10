@@ -5,10 +5,11 @@
  */
 package cn.hangcc.automaticpunchxust.provider.conterller.AutomaticPunch;
 
+import cn.hangcc.automaticpunchxust.biz.AutomaticPunch.AliSmsBiz;
 import cn.hangcc.automaticpunchxust.biz.AutomaticPunch.ParamCheckBiz;
 import cn.hangcc.automaticpunchxust.biz.AutomaticPunch.UserInfoBiz;
 import cn.hangcc.automaticpunchxust.common.response.ApiResponse;
-import cn.hangcc.automaticpunchxust.domain.model.AutomaticPunch.UserInfoModel;
+import cn.hangcc.automaticpunchxust.domain.model.AutomaticClockIn.UserInfoModel;
 import cn.hangcc.automaticpunchxust.service.AutomaticPunch.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 /**
  * 在这里编写类的功能描述
@@ -39,6 +39,9 @@ public class UserInfoController {
 
     @Resource
     private UserInfoService userInfoService;
+
+    @Resource
+    private AliSmsBiz aliSmsBiz;
 
     /**
      * 用户添加任务的请求接口
@@ -65,6 +68,8 @@ public class UserInfoController {
             // 设置相关属性值
             setUserAttribute(userInfoModel, url, schoolId, email, status);
             userInfoService.insert(userInfoModel);
+            // 发送短信告知用户注册成功
+            aliSmsBiz.sendRegisterSuccessMsg(userInfoModel);
             return ApiResponse.buildSuccess();
         } catch (Exception e) {
             log.error("UserInfoController.addUser | 用户添加任务时出现异常, url:{}, e=", url, e);

@@ -1,4 +1,4 @@
-package cn.hangcc.automaticpunchxust.domain.model.AutomaticPunch;
+package cn.hangcc.automaticpunchxust.domain.model.AutomaticClockIn;
 
 import lombok.Data;
 

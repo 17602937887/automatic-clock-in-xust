@@ -5,8 +5,16 @@ spring:
   # kafka配置
   kafka:
     producer:
-      bootstrap-servers: 120.26.160.137:9092 #服务器ip+端口
-
+      bootstrap-servers: 39.106.120.32:9092 #生产消息的接受服务器ip+端口
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: test-consumer-group
+      enable-auto-commit: true
+      auto-commit-interval: 1000
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      bootstrap-servers: 39.106.120.32:9092 #消费消息的获取服务器ip+端口
   # 数据库连接配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

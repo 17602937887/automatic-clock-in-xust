@@ -1,7 +1,7 @@
 package cn.hangcc.automaticpunchxust.service.AutomaticPunch.impl;
 
 import cn.hangcc.automaticpunchxust.dao.AutomaticPunch.UserInfoDao;
-import cn.hangcc.automaticpunchxust.domain.model.AutomaticPunch.UserInfoModel;
+import cn.hangcc.automaticpunchxust.domain.model.AutomaticClockIn.UserInfoModel;
 import cn.hangcc.automaticpunchxust.service.AutomaticPunch.UserInfoService;
 import cn.hangcc.automaticpunchxust.service.converter.AutomaticPunch.UserInfoModelConverter;
 import org.springframework.stereotype.Service;

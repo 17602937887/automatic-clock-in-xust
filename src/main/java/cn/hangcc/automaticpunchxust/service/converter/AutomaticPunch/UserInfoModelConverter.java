@@ -6,7 +6,7 @@
 package cn.hangcc.automaticpunchxust.service.converter.AutomaticPunch;
 
 import cn.hangcc.automaticpunchxust.domain.dto.AutomaticPunch.UserInfoDO;
-import cn.hangcc.automaticpunchxust.domain.model.AutomaticPunch.UserInfoModel;
+import cn.hangcc.automaticpunchxust.domain.model.AutomaticClockIn.UserInfoModel;
 
 /**
  *
