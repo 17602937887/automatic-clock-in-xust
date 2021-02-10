@@ -5,6 +5,8 @@
  */
 package cn.hangcc.automaticpunchxust.task.AutomaticPunch;
 
+import cn.hangcc.automaticpunchxust.common.constant.AutomaticPunchConstants;
+import cn.hangcc.automaticpunchxust.common.utils.LocalDateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -32,7 +34,9 @@ public class PunchMsgProducer {
     @Scheduled(cron = "* * * * * ?")
     public void send() {
         String msg = LocalDateTime.now().toString();
-        ListenableFuture future= kafkaTemplate.send("test", msg);
-        future.addCallback(o -> System.out.printf("消息发送成功"), throwable -> System.out.printf("消息发送失败"));
+        ListenableFuture future= kafkaTemplate.send(AutomaticPunchConstants.KAFKA_PUNCH_INFO_TOPIC, msg);
+        String time = LocalDateUtils.getNowTime();
+        future.addCallback(o -> log.info("kafka签到消息发送成功,time:{}, msg:{}", time, msg),
+                throwable -> log.error("kafka签到消息发送失败,time:{}, msg:{} ", time, msg));
     }
 }

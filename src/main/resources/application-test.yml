@@ -5,7 +5,7 @@ spring:
   # kafka配置
   kafka:
     producer:
-      bootstrap-servers: 120.26.160.137:9092 #服务器ip+端口
+      bootstrap-servers: 39.106.120.32:9092 #服务器ip+端口
 
   # 数据库连接配置
   datasource:

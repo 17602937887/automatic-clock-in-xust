@@ -9,9 +9,6 @@ import cn.hangcc.automaticpunchxust.common.constant.AutomaticPunchConstants;
 import cn.hangcc.automaticpunchxust.common.utils.AutomaticPunchUtils;
 import cn.hangcc.automaticpunchxust.domain.model.AutomaticPunch.UserInfoModel;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,7 +19,6 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -68,7 +64,7 @@ public class UserInfoBiz {
             // 创建client
             CloseableHttpClient client = HttpClientBuilder.create().build();
             // 设置请求地址及Headers
-            HttpGet request = AutomaticPunchUtils.setHeaders(new HttpGet(String.format("%s?gh=%d", AutomaticPunchConstants.REQUEST_USER_INFO_URL, schoolId)));
+            HttpGet request = AutomaticPunchUtils.setHeaders(new HttpGet(String.format("%s%d", AutomaticPunchConstants.REQUEST_USER_INFO_URL, schoolId)));
             // 设置Cookie
             String cookie = getUserCookie(url);
             request.setHeader("Cookie", cookie);
@@ -94,9 +90,5 @@ public class UserInfoBiz {
         user.setGender(map.get("XB"));
         user.setClassName(map.get("BJ"));
         user.setCollege(map.get("SZYX"));
-    }
-    public static void main(String[] args) {
-        UserInfoModel userInfo = new UserInfoBiz().getUserInfo("https://ehallplatform.xust.edu.cn/default/jkdk/mobile/mobJkdkAdd_test.jsp?uid=M0YyNkIxQzNGNkExQkVCRThGRkNFQTEzMzI2RjY4Q0U=", 16407020419L);
-        System.out.println(userInfo);
     }
 }
