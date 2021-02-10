@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.hangcc.automaticpunchxust.dao.AutomaticPunch.UserInfoDao">
+<mapper namespace="cn.hangcc.automaticclockinxust.dao.AutomaticClockIn.UserInfoDao">
 
-    <resultMap type="cn.hangcc.automaticpunchxust.domain.dto.AutomaticPunch.UserInfoDO" id="resultMap">
+    <resultMap type="cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.UserInfoDO" id="resultMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="schoolId" column="school_id" jdbcType="INTEGER"/>
         <result property="userUrl" column="user_url" jdbcType="VARCHAR"/>
@@ -51,10 +51,10 @@
                 school_id = #{schoolId},
             </if>
             <if test="userUrl != null and userUrl != ''">
-                user_url = #{userUrl}
+                user_url = #{userUrl},
             </if>
             <if test="cookie != null and cookie != ''">
-                cookie = #{cookie}
+                cookie = #{cookie},
             </if>
             <if test="name != null and name != ''">
                 name = #{name},
@@ -68,8 +68,8 @@
             <if test="gender != null and gender != ''">
                 gender = #{gender},
             </if>
-            <if test="class != null and class != ''">
-                class = #{class},
+            <if test="className != null and className != ''">
+                class_name = #{className},
             </if>
             <if test="college != null and college != ''">
                 college = #{college},
@@ -84,7 +84,7 @@
                 updated = #{updated},
             </if>
         </set>
-        where id = #{id}
+        where school_id = #{schoolId}
     </update>
 
     <select id="query" resultMap="resultMap">
