@@ -36,7 +36,7 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into automatic_punch_user_info_table(school_id, user_url, cookie, name, phone,
+        insert into automatic_clock_in_user_info_table(school_id, user_url, cookie, name, phone,
                                                                          email, gender, class_name,
                                                                          college, status)
         values (#{schoolId}, #{userUrl}, #{cookie}, #{name}, #{phone}, #{email}, #{gender}, #{className}, #{college},
@@ -45,7 +45,7 @@
 
     <!--通过主键修改数据-->
     <update id="update">
-        update automatic_punch_user_info_table
+        update automatic_clock_in_user_info_table
         <set>
             <if test="schoolId != null">
                 school_id = #{schoolId},
@@ -88,6 +88,6 @@
     </update>
 
     <select id="query" resultMap="resultMap">
-        select <include refid="all_column"/> from automatic_punch_user_info_table where school_id = #{schoolId}
+        select <include refid="all_column"/> from automatic_clock_in_user_info_table where school_id = #{schoolId}
     </select>
 </mapper>

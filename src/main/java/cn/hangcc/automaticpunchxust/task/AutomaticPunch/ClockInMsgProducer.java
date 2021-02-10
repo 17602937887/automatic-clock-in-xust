@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 /**
- * 在这里编写类的功能描述
+ * 用户签到信息生产者 定时任务去生产消息
  *
  * @author chenhang
  * @created 2021/2/8
@@ -26,14 +26,14 @@ import java.time.LocalDateTime;
 @Slf4j
 @Component
 @EnableScheduling
-public class PunchMsgProducer {
+public class ClockInMsgProducer {
 
     @Resource
     private KafkaTemplate kafkaTemplate;
 
-    @Scheduled(cron = "* * * * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void send() {
-        String msg = LocalDateTime.now().toString();
+        String msg = "msg = " + LocalDateTime.now().toString();
         ListenableFuture future= kafkaTemplate.send(AutomaticPunchConstants.KAFKA_PUNCH_INFO_TOPIC, msg);
         String time = LocalDateUtils.getNowTime();
         future.addCallback(o -> log.info("kafka签到消息发送成功,time:{}, msg:{}", time, msg),

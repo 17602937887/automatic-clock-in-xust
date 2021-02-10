@@ -1,10 +1,10 @@
 # 项目需要的库、表、等结构的sql语句
 
 # 库名
-create database if not exists automatic_punch_xust;
+create database if not exists automatic_clock_in_xust;
 
 # 用户信息表
-create table if not exists automatic_punch_user_info_table(
+create table if not exists automatic_clock_in_user_info_table(
     `id` int(11) primary key auto_increment comment '主键',
     `school_id` bigint(20) not null comment '用户工号',
     `user_url` varchar(255) not null comment '用户进行签到的URL地址',
@@ -20,4 +20,14 @@ create table if not exists automatic_punch_user_info_table(
     `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     unique key uk_school_id(`school_id`) comment '唯一索引 工号',
     key idx_status(`status`) comment '普通索引'
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+# 用户打卡日志表
+create table if not exists automatic_clock_in_user_logs_table(
+    `id` int(11) primary key auto_increment comment '主键',
+    `school_id` bigint(20) not null comment '用户工号',
+    `name` varchar(255) not null comment '用户名字',
+    `info` varchar(255) comment '日志信息',
+    `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

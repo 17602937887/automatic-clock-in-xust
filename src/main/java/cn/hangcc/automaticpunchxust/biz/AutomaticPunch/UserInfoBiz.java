@@ -7,7 +7,7 @@ package cn.hangcc.automaticpunchxust.biz.AutomaticPunch;
 
 import cn.hangcc.automaticpunchxust.common.constant.AutomaticPunchConstants;
 import cn.hangcc.automaticpunchxust.common.utils.AutomaticPunchUtils;
-import cn.hangcc.automaticpunchxust.domain.model.AutomaticPunch.UserInfoModel;
+import cn.hangcc.automaticpunchxust.domain.model.AutomaticClockIn.UserInfoModel;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
@@ -19,6 +19,7 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 /**
@@ -71,7 +72,7 @@ public class UserInfoBiz {
             // 发起请求 得到请求结果
             CloseableHttpResponse response = client.execute(request);
             // 转为json
-            String jsonResponse = EntityUtils.toString(response.getEntity(), "utf-8");
+            String jsonResponse = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
             // 获取基本信息的map
             Map<String, String> map = (Map<String, String>) JSON.parseObject(jsonResponse).getJSONArray("list").get(0);
             UserInfoModel user = new UserInfoModel();
