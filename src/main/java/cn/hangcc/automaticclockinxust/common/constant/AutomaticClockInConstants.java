@@ -25,17 +25,21 @@ public class AutomaticClockInConstants {
     /**
      * kafka签到信息的topic. 此处更换为你创建的topic名称
      */
-    public static final String KAFKA_PUNCH_INFO_TOPIC = "demo";
+    public static final String KAFKA_CLOCK_IN_INFO_TOPIC = "clock-in-info";
 
+    /**
+     * kafka发送短信的topic，此处更换为你创建的topic名称
+     */
+    public static final String KAFKA_SEND_SMS_TOPIC = "sms";
     /**
      * 阿里云accessKeyId. 此处更换为你在阿里云accessKeyId
      */
-    public static final String ALIYUN_ACCESS_KEY_ID = "LTAIlHdZZxWKDTW3";
+    public static final String ALIYUN_ACCESS_KEY_ID = "LTAI4G49PnQjhCZ2kb8GwWNT";
 
     /**
      * 阿里云accessSecret. 此处更换为你在阿里云accessSecret
      */
-    public static final String ALIYUN_ACCESS_SECRET = "yS9KudRRWfBTxzNywTBPPsxYBuVhqh";
+    public static final String ALIYUN_ACCESS_SECRET = "zonhvecFfoQthKjYg62JMNPjHDFYrP";
 
     /**
      * 阿里云短信服务签名. 此处更改为你在阿里云的签名

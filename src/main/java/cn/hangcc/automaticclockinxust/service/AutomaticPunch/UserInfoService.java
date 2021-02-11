@@ -1,6 +1,9 @@
 package cn.hangcc.automaticclockinxust.service.AutomaticPunch;
 
+import cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.UserInfoDO;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.UserInfoModel;
+
+import java.util.List;
 
 /**
  * (AutomaticPunchUserInfoTable)表服务接口
@@ -30,4 +33,16 @@ public interface UserInfoService {
      * @param userInfoModel 实例对象
      */
     void update(UserInfoModel userInfoModel);
+
+    /**
+     * 查询所有早上需要打卡的用户
+     * @return 用户集合
+     */
+    List<UserInfoModel> listMorningClockInUser();
+
+    /**
+     * 查询所有晚上需要打卡的用户
+     * @return 用户集合
+     */
+    List<UserInfoModel> listEveningClockInUser();
 }

@@ -4,6 +4,8 @@ import cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.UserInfoDO;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * (AutomaticPunchUserInfoTable)表数据库访问层
  *
@@ -34,4 +36,16 @@ public interface UserInfoDao {
      * @return 用户的信息
      */
     UserInfoDO query(@Param("schoolId") Long schoolId);
+
+    /**
+     * 查询所有早上需要打卡的用户
+     * @return 用户集合
+     */
+    List<UserInfoDO> listMorningClockInUser();
+
+    /**
+     * 查询所有晚上需要打卡的用户
+     * @return 用户集合
+     */
+    List<UserInfoDO> listEveningClockInUser();
 }

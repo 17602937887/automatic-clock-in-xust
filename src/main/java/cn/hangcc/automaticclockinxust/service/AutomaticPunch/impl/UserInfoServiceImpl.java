@@ -7,6 +7,8 @@ import cn.hangcc.automaticclockinxust.service.converter.AutomaticPunch.UserInfoM
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * (AutomaticPunchUserInfoTable)表服务实现类
@@ -50,5 +52,29 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public void update(UserInfoModel userInfoModel) {
         userInfoDao.update(UserInfoModelConverter.convertToUserInfoDO(userInfoModel));
+    }
+
+    /**
+     * 查询所有早上需要打卡的用户
+     * @return 用户集合
+     */
+    @Override
+    public List<UserInfoModel> listMorningClockInUser() {
+        return userInfoDao.listMorningClockInUser()
+                .stream()
+                .map(UserInfoModelConverter::convertToUserInfoModel)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 查询所有晚上需要打卡的用户
+     * @return 用户集合
+     */
+    @Override
+    public List<UserInfoModel> listEveningClockInUser() {
+        return userInfoDao.listEveningClockInUser()
+                .stream()
+                .map(UserInfoModelConverter::convertToUserInfoModel)
+                .collect(Collectors.toList());
     }
 }

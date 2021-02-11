@@ -49,7 +49,9 @@ public class AliSmsBiz {
         request.putQueryParameter("PhoneNumbers", String.valueOf(user.getPhone()));
         request.putQueryParameter("SignName", AutomaticClockInConstants.ALIYUN_SMS_SIGN_NAME);
         request.putQueryParameter("TemplateCode", AutomaticClockInConstants.ALIYUN_REGISTER_SUCCESS_TEMPLATE_CODE);
-        request.putQueryParameter("TemplateParam", user.getName());
+        Map<String, String> map = new HashMap<>();
+        map.put("name", user.getName());
+        request.putQueryParameter("TemplateParam", JSON.toJSONString(map));
         try {
             CommonResponse response = client.getCommonResponse(request);
             log.info("用户注册成功消息发送成功, name:{}, phone:{}", user.getName(), user.getPhone());

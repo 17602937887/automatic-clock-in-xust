@@ -31,10 +31,10 @@ public class ClockInMsgProducer {
     @Resource
     private KafkaTemplate kafkaTemplate;
 
-    // @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void send() {
         String msg = "msg = " + LocalDateTime.now().toString();
-        ListenableFuture future= kafkaTemplate.send(AutomaticClockInConstants.KAFKA_PUNCH_INFO_TOPIC, msg);
+        ListenableFuture future= kafkaTemplate.send(AutomaticClockInConstants.KAFKA_CLOCK_IN_INFO_TOPIC, msg);
         String time = LocalDateUtils.getNowTime();
         future.addCallback(o -> log.info("kafka签到消息发送成功,time:{}, msg:{}", time, msg),
                 throwable -> log.error("kafka签到消息发送失败,time:{}, msg:{} ", time, msg));

@@ -13,7 +13,9 @@ import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ClockInMsgMo
 import jdk.nashorn.internal.ir.annotations.Reference;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -31,13 +33,13 @@ public class ClockInMsgConsumer {
     @Resource
     private TaskBiz taskBiz;
 
-    @Reference
+    @Resource
     private UserLogsDao userLogsDao;
 
     @Resource
-    private AliSmsBiz aliSmsBiz;
+    private KafkaTemplate kafkaTemplate;
 
-    @KafkaListener(topics = AutomaticClockInConstants.KAFKA_PUNCH_INFO_TOPIC)
+    @KafkaListener(topics = AutomaticClockInConstants.KAFKA_CLOCK_IN_INFO_TOPIC)
     public void listen(ConsumerRecord<?, ?> record) {
         // kafka接受到的签到信息
         ClockInMsgModel msg = (ClockInMsgModel) record.value();
@@ -49,7 +51,7 @@ public class ClockInMsgConsumer {
                 }
             }
             userLogsDao.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_FAILED_CONTENT);
-            aliSmsBiz.sendClockInFailedMsg(msg);
+            kafkaTemplate.send(AutomaticClockInConstants.KAFKA_SEND_SMS_TOPIC, msg);
             userLogsDao.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_FAILED_SEND_SMS_CONTENT);
         } catch (Exception e) {
             log.error("ClockInMsgConsumer.listen | 消费消息时出现异常: msg:{}, e = ", msg, e);

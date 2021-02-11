@@ -31,3 +31,22 @@ create table if not exists automatic_clock_in_user_logs_table(
     `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+# 系统配置表 统一配置中心
+create table if not exists automatic_clock_in_config_table(
+    `id` int(11) primary key auto_increment comment '主键',
+    `key` varchar(255) not null comment '键',
+    `value` varchar(255) not null comment '值',
+    `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    key inx_key(`key`) comment '普通索引'
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+# 插入早上开始签到的时间点
+insert into automatic_clock_in_config_table(`key`, `value`) values ('morningStartTime', '11:15:00');
+# 插入早上结束签到的时间点
+insert into automatic_clock_in_config_table(`key`, `value`) values ('morningEndTime', '12:00:00');
+# 插入晚上开始签到的时间点
+insert into automatic_clock_in_config_table(`key`, `value`) values ('eveningStartTime', '17:15:00');
+# 插入晚上结束签到的时间点
+insert into automatic_clock_in_config_table(`key`, `value`) values ('eveningEndTime', '18:00:00');

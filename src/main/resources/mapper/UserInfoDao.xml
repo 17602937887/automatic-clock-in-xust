@@ -90,4 +90,17 @@
     <select id="query" resultMap="resultMap">
         select <include refid="all_column"/> from automatic_clock_in_user_info_table where school_id = #{schoolId}
     </select>
+
+    <select id="listMorningClockInUser" resultMap="resultMap">
+        select <include refid="all_column"/>
+        from automatic_clock_in_user_info_table
+        where status in (1, 3)
+    </select>
+
+    <select id="listEveningClockInUser" resultMap="resultMap">
+        select <include refid="all_column"/>
+        from automatic_clock_in_user_info_table
+        where status in (2, 3)
+    </select>
+
 </mapper>

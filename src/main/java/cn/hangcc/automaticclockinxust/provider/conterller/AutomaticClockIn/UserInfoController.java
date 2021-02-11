@@ -9,12 +9,13 @@ import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.AliSmsBiz;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.ParamCheckBiz;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.TaskBiz;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.UserInfoBiz;
+import cn.hangcc.automaticclockinxust.common.constant.AutomaticClockInConstants;
 import cn.hangcc.automaticclockinxust.common.response.ApiResponse;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.UserInfoModel;
 import cn.hangcc.automaticclockinxust.service.AutomaticPunch.UserInfoService;
 import cn.hangcc.automaticclockinxust.service.converter.AutomaticPunch.UserInfoModelConverter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Primary;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,6 +50,9 @@ public class UserInfoController {
     @Resource
     private TaskBiz taskBiz;
 
+    @Resource
+    private KafkaTemplate kafkaTemplate;
+
     /**
      * 用户添加任务的请求接口
      * @param url 用户的签到打卡地址
@@ -74,8 +78,8 @@ public class UserInfoController {
             // 设置相关属性值
             setUserAttribute(userInfoModel, url, schoolId, email, status);
             userInfoService.insert(userInfoModel);
-            // 发送短信告知用户注册成功
-            aliSmsBiz.sendRegisterSuccessMsg(userInfoModel);
+            // 异步发送短信告知用户注册成功
+            kafkaTemplate.send(AutomaticClockInConstants.KAFKA_SEND_SMS_TOPIC, userInfoModel);
             // 直接进行一次打卡
             taskBiz.executeTask(UserInfoModelConverter.convertToClockInMsgModel(userInfoModel));
             return ApiResponse.buildSuccess();
