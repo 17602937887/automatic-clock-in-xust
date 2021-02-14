@@ -10,7 +10,7 @@ spring:
   # 数据库连接配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://8.210.131.194:3306/automatic_punch_xust #服务器ip mysql端口
+    url: jdbc:mysql://8.210.131.194:3306/automatic_clock_in_xust #服务器ip mysql端口
     username: root
     password: Chh980929...
 

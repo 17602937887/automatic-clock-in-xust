@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hangcc.automaticclockinxust.dao.AutomaticClockIn.ConfigDao">
+
+    <resultMap id="resultMap" type="cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.ConfigDO">
+        <result property="key" column="key" jdbcType="VARCHAR"/>
+        <result property="value" column="value" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="all_column">
+        `id`,
+        `key`,
+        `value`,
+        `created`,
+        `updated`
+    </sql>
+
+    <select id="query" resultMap="resultMap">
+        select `key`, `value`
+        from automatic_clock_in_config_table
+        where `key` = #{key}
+    </select>
+</mapper>
