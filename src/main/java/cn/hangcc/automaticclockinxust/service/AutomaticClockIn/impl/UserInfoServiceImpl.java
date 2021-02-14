@@ -1,8 +1,8 @@
-package cn.hangcc.automaticclockinxust.service.AutomaticPunch.impl;
+package cn.hangcc.automaticclockinxust.service.AutomaticClockIn.impl;
 
 import cn.hangcc.automaticclockinxust.dao.AutomaticClockIn.UserInfoDao;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.UserInfoModel;
-import cn.hangcc.automaticclockinxust.service.AutomaticPunch.UserInfoService;
+import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.UserInfoService;
 import cn.hangcc.automaticclockinxust.service.converter.AutomaticPunch.UserInfoModelConverter;
 import org.springframework.stereotype.Service;
 

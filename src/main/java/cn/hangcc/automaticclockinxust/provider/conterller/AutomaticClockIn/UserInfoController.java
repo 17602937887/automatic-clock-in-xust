@@ -5,14 +5,12 @@
  */
 package cn.hangcc.automaticclockinxust.provider.conterller.AutomaticClockIn;
 
-import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.AliSmsBiz;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.ParamCheckBiz;
-import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.TaskBiz;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.UserInfoBiz;
 import cn.hangcc.automaticclockinxust.common.constant.AutomaticClockInConstants;
 import cn.hangcc.automaticclockinxust.common.response.ApiResponse;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.UserInfoModel;
-import cn.hangcc.automaticclockinxust.service.AutomaticPunch.UserInfoService;
+import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.UserInfoService;
 import cn.hangcc.automaticclockinxust.service.converter.AutomaticPunch.UserInfoModelConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -45,12 +43,6 @@ public class UserInfoController {
     private UserInfoService userInfoService;
 
     @Resource
-    private AliSmsBiz aliSmsBiz;
-
-    @Resource
-    private TaskBiz taskBiz;
-
-    @Resource
     private KafkaTemplate kafkaTemplate;
 
     /**
@@ -80,8 +72,8 @@ public class UserInfoController {
             userInfoService.insert(userInfoModel);
             // 异步发送短信告知用户注册成功
             kafkaTemplate.send(AutomaticClockInConstants.KAFKA_SEND_SMS_TOPIC, userInfoModel);
-            // 直接进行一次打卡
-            taskBiz.executeTask(UserInfoModelConverter.convertToClockInMsgModel(userInfoModel));
+            // 扔到mq里面 进行一次打卡
+            kafkaTemplate.send(AutomaticClockInConstants.KAFKA_CLOCK_IN_INFO_TOPIC, UserInfoModelConverter.convertToClockInMsgModel(userInfoModel));
             return ApiResponse.buildSuccess();
         } catch (Exception e) {
             log.error("UserInfoController.addUser | 用户添加任务时出现异常, url:{}, e=", url, e);

@@ -1,6 +1,5 @@
-package cn.hangcc.automaticclockinxust.service.AutomaticPunch;
+package cn.hangcc.automaticclockinxust.service.AutomaticClockIn;
 
-import cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.UserInfoDO;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.UserInfoModel;
 
 import java.util.List;

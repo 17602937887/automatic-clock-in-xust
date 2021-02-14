@@ -6,12 +6,9 @@
 package cn.hangcc.automaticclockinxust.provider.mq;
 
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.AliSmsBiz;
-import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.TaskBiz;
 import cn.hangcc.automaticclockinxust.common.constant.AutomaticClockInConstants;
-import cn.hangcc.automaticclockinxust.dao.AutomaticClockIn.UserLogsDao;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ClockInMsgModel;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.UserInfoModel;
-import jdk.nashorn.internal.ir.annotations.Reference;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;

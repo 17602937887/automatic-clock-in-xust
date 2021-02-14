@@ -1,6 +1,7 @@
 package cn.hangcc.automaticclockinxust.common.utils;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class LocalDateUtils {
@@ -10,6 +11,9 @@ public class LocalDateUtils {
     public static final DateTimeFormatter INT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public static final DateTimeFormatter LEGACY_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
+
     /**
      * LocalDataTime转为可读的时间
      * @param localDateTime
@@ -40,5 +44,14 @@ public class LocalDateUtils {
      */
     public static String getNextDate() {
         return DATE_FORMATTER.format(LocalDateTime.now().plusDays(1));
+    }
+
+    /**
+     * 获取小时 分钟 秒
+     * @param target 待转换的字符串
+     * @return LocalTime
+     */
+    public static LocalTime getLocalTime(String target) {
+        return LocalTime.parse(target, LEGACY_TIME_FORMATTER);
     }
 }

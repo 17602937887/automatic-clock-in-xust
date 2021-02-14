@@ -5,15 +5,12 @@
  */
 package cn.hangcc.automaticclockinxust.provider.mq;
 
-import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.AliSmsBiz;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.TaskBiz;
 import cn.hangcc.automaticclockinxust.common.constant.AutomaticClockInConstants;
-import cn.hangcc.automaticclockinxust.dao.AutomaticClockIn.UserLogsDao;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ClockInMsgModel;
-import jdk.nashorn.internal.ir.annotations.Reference;
+import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.UserLogsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -34,7 +31,7 @@ public class ClockInMsgConsumer {
     private TaskBiz taskBiz;
 
     @Resource
-    private UserLogsDao userLogsDao;
+    private UserLogsService userLogsService;
 
     @Resource
     private KafkaTemplate kafkaTemplate;
@@ -46,16 +43,16 @@ public class ClockInMsgConsumer {
         try {
             for (int i = 0; i < AutomaticClockInConstants.CLOCK_IN_FAILED_RETRY_COUNT; i++) {
                 if (taskBiz.executeTask(msg)) {
-                    userLogsDao.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_SUCCESS_CONTENT);
+                    userLogsService.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_SUCCESS_CONTENT);
                     return ;
                 }
             }
-            userLogsDao.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_FAILED_CONTENT);
+            userLogsService.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_FAILED_CONTENT);
             kafkaTemplate.send(AutomaticClockInConstants.KAFKA_SEND_SMS_TOPIC, msg);
-            userLogsDao.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_FAILED_SEND_SMS_CONTENT);
+            userLogsService.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_FAILED_SEND_SMS_CONTENT);
         } catch (Exception e) {
             log.error("ClockInMsgConsumer.listen | 消费消息时出现异常: msg:{}, e = ", msg, e);
-            userLogsDao.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_FAILED_EXCEPTION);
+            userLogsService.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_FAILED_EXCEPTION);
         }
     }
 }

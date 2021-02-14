@@ -3,11 +3,11 @@
  * All rights reserved.
  *
  */
-package cn.hangcc.automaticclockinxust.dao.AutomaticClockIn;
+package cn.hangcc.automaticclockinxust.service.AutomaticClockIn;
 
 import cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.ConfigDO;
+import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ConfigModel;
 import io.lettuce.core.dynamic.annotation.Param;
-import org.springframework.stereotype.Repository;
 
 /**
  * 在这里编写类的功能描述
@@ -15,12 +15,11 @@ import org.springframework.stereotype.Repository;
  * @author chenhang
  * @created 2021/2/11
  */
-@Repository
-public interface ConfigDao {
+public interface ConfigService {
     /**
      * 根据key查询对应的value值 类似于统一配置中心
      * @param key 键
      * @return 值
      */
-    ConfigDO query(@Param("key") String key);
+    ConfigModel query(String key);
 }
