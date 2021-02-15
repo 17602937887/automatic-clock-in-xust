@@ -7,6 +7,8 @@ package cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 在这里编写类的功能描述
  *
@@ -14,7 +16,7 @@ import lombok.Data;
  * @created 2021/2/11
  */
 @Data
-public class ConfigModel {
+public class ConfigModel implements Serializable {
     /**
      * 键
      */

@@ -7,6 +7,8 @@ package cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 打卡所需的信息
  *
@@ -14,7 +16,7 @@ import lombok.Data;
  * @created 2021/2/10
  */
 @Data
-public class ClockInMsgModel {
+public class ClockInMsgModel implements Serializable {
     /**
      * 用户工号
      */
