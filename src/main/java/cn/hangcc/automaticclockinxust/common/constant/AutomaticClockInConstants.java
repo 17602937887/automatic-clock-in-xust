@@ -28,9 +28,13 @@ public class AutomaticClockInConstants {
     public static final String KAFKA_CLOCK_IN_INFO_TOPIC = "clock-in-info";
 
     /**
-     * kafka发送短信的topic，此处更换为你创建的topic名称
+     * kafka发送注册成功短信的topic，此处更换为你创建的topic名称
      */
-    public static final String KAFKA_SEND_SMS_TOPIC = "sms";
+    public static final String KAFKA_SEND_REGISTER_SUCCESS_SMS_TOPIC = "register-success-topic";
+    /**
+     * kafka发生打卡失败短信的topic。
+     */
+    public static final String KAFKA_SEND_CLOCK_IN_FAILED_SMS_TOPIC = "clock-in-failed-topic";
     /**
      * 阿里云accessKeyId. 此处更换为你在阿里云accessKeyId
      */
@@ -80,4 +84,9 @@ public class AutomaticClockInConstants {
      * 签到失败 catch到异常的落库文案
      */
     public static final String CLOCK_IN_FAILED_EXCEPTION = "签到失败、出现异常";
+
+    /**
+     * 保证配置中心起始的时间也会进行签到操作
+     */
+    public static final long KAFKA_SLEEP_TIME = 2000;
 }

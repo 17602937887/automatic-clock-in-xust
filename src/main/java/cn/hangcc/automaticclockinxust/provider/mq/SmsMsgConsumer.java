@@ -9,6 +9,7 @@ import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.AliSmsBiz;
 import cn.hangcc.automaticclockinxust.common.constant.AutomaticClockInConstants;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ClockInMsgModel;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.UserInfoModel;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -29,17 +30,23 @@ public class SmsMsgConsumer {
     @Resource
     private AliSmsBiz aliSmsBiz;
 
-    @KafkaListener(topics = AutomaticClockInConstants.KAFKA_SEND_SMS_TOPIC)
-    public void listen(ConsumerRecord<?, ?> record) {
+    @KafkaListener(topics = AutomaticClockInConstants.KAFKA_SEND_REGISTER_SUCCESS_SMS_TOPIC)
+    public void listenRegisterSuccess(ConsumerRecord<?, ?> record) {
         try {
-            Object value = record.value();
-            // 发送的是注册成功的短信消息
-            if (value instanceof UserInfoModel) {
-                aliSmsBiz.sendRegisterSuccessMsg((UserInfoModel) value);
+            UserInfoModel value = JSON.parseObject(record.value().toString(), UserInfoModel.class);
+            // 发送注册成功的短信消息
+            aliSmsBiz.sendRegisterSuccessMsg(value);
+        } catch (Exception e) {
+            log.error("调用Aliyun短信接口出现异常: e = ", e);
+        }
+    }
+
+    @KafkaListener(topics = AutomaticClockInConstants.KAFKA_SEND_CLOCK_IN_FAILED_SMS_TOPIC)
+    public void listenClockInFailed(ConsumerRecord<?, ?> record) {
+        try {
+            ClockInMsgModel value = JSON.parseObject(record.value().toString(), ClockInMsgModel.class);
             // 发送打卡失败的短信消息
-            } else if (value instanceof ClockInMsgModel) {
-                aliSmsBiz.sendClockInFailedMsg((ClockInMsgModel) value);
-            }
+            aliSmsBiz.sendClockInFailedMsg(value);
         } catch (Exception e) {
             log.error("调用Aliyun短信接口出现异常: e = ", e);
         }

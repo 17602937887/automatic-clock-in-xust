@@ -11,6 +11,7 @@ import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ConfigModel;
 import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.ConfigService;
 import cn.hangcc.automaticclockinxust.service.converter.AutomaticPunch.ConfigModelConverter;
 import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -20,6 +21,7 @@ import javax.annotation.Resource;
  * @author chenhang
  * @created 2021/2/11
  */
+@Service
 public class ConfigServiceImpl implements ConfigService {
 
     @Resource

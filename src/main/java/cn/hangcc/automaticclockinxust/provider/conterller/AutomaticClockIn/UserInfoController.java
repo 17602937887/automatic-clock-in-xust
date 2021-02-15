@@ -6,14 +6,21 @@
 package cn.hangcc.automaticclockinxust.provider.conterller.AutomaticClockIn;
 
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.ParamCheckBiz;
+import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.TaskBiz;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.UserInfoBiz;
 import cn.hangcc.automaticclockinxust.common.constant.AutomaticClockInConstants;
 import cn.hangcc.automaticclockinxust.common.response.ApiResponse;
+import cn.hangcc.automaticclockinxust.common.utils.LocalDateUtils;
+import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ClockInMsgModel;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.UserInfoModel;
+import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.ConfigService;
 import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.UserInfoService;
 import cn.hangcc.automaticclockinxust.service.converter.AutomaticPunch.UserInfoModelConverter;
+import com.alibaba.fastjson.JSON;
+import com.google.gson.JsonSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 在这里编写类的功能描述
@@ -44,6 +55,12 @@ public class UserInfoController {
 
     @Resource
     private KafkaTemplate kafkaTemplate;
+
+    @Resource
+    private TaskBiz taskBiz;
+
+    @Resource
+    private ConfigService configService;
 
     /**
      * 用户添加任务的请求接口
@@ -71,12 +88,67 @@ public class UserInfoController {
             setUserAttribute(userInfoModel, url, schoolId, email, status);
             userInfoService.insert(userInfoModel);
             // 异步发送短信告知用户注册成功
-            kafkaTemplate.send(AutomaticClockInConstants.KAFKA_SEND_SMS_TOPIC, userInfoModel);
+            kafkaTemplate.send(AutomaticClockInConstants.KAFKA_SEND_REGISTER_SUCCESS_SMS_TOPIC, JSON.toJSON(userInfoModel).toString());
             // 扔到mq里面 进行一次打卡
-            kafkaTemplate.send(AutomaticClockInConstants.KAFKA_CLOCK_IN_INFO_TOPIC, UserInfoModelConverter.convertToClockInMsgModel(userInfoModel));
+            kafkaTemplate.send(AutomaticClockInConstants.KAFKA_CLOCK_IN_INFO_TOPIC, JSON.toJSON(UserInfoModelConverter.convertToClockInMsgModel(userInfoModel)).toString());
             return ApiResponse.buildSuccess();
         } catch (Exception e) {
             log.error("UserInfoController.addUser | 用户添加任务时出现异常, url:{}, e=", url, e);
+            return ApiResponse.buildFailure();
+        }
+    }
+
+    @GetMapping("/execute.json")
+    public ApiResponse execute(@RequestParam("schoolId") Long schoolId) {
+        try {
+            UserInfoModel user = userInfoService.query(schoolId);
+            taskBiz.executeTask(UserInfoModelConverter.convertToClockInMsgModel(user));
+            return ApiResponse.buildSuccess();
+        } catch (Exception e) {
+            log.error("UserInfoController.execute | 手动执行单个用户签到出现异常, schoolId:{}, e = ", schoolId, e);
+            return ApiResponse.buildFailure("手动执行单个用户签到出现异常");
+        }
+    }
+
+    @GetMapping("executeAll.json")
+    public ApiResponse executeAllUser() {
+        try {
+            // 获取当前时间
+            LocalTime nowTime = LocalTime.now();
+            LocalTime morningStartTime = LocalDateUtils.getLocalTime(configService.query("morningStartTime").getValue());
+            LocalTime morningEndTime = LocalDateUtils.getLocalTime(configService.query("morningEndTime").getValue());
+            // 当前时刻为满足配置中心的签到时刻 全量数据进行签到
+            if (nowTime.isAfter(morningStartTime) && nowTime.isBefore(morningEndTime)) {
+                List<UserInfoModel> userInfoModels = userInfoService.listMorningClockInUser();
+                List<ClockInMsgModel> clockInMsgModels = userInfoModels.stream().map(UserInfoModelConverter::convertToClockInMsgModel).collect(Collectors.toList());
+                clockInMsgModels.forEach(msg -> {
+                    try {
+                        taskBiz.executeTask(msg);
+                    } catch (IOException e) {
+                        log.error("执行用户签到发生异常, e = ", e);
+                    }
+                });
+                return ApiResponse.buildSuccess();
+            }
+            LocalTime eveningStartTime = LocalDateUtils.getLocalTime(configService.query("eveningStartTime").getValue());
+            LocalTime eveningEndTime = LocalDateUtils.getLocalTime(configService.query("eveningEndTime").getValue());
+            // 当前时刻为满足配置中心的签到时刻 取出部分满足的数据进行签到
+            if (nowTime.isAfter(eveningStartTime) && nowTime.isBefore(eveningEndTime)) {
+                List<UserInfoModel> userInfoModels = userInfoService.listEveningClockInUser();
+                List<ClockInMsgModel> clockInMsgModels = userInfoModels.stream().map(UserInfoModelConverter::convertToClockInMsgModel).collect(Collectors.toList());
+                clockInMsgModels.forEach(msg -> {
+                    try {
+                        taskBiz.executeTask(msg);
+                    } catch (IOException e) {
+                        log.error("执行用户签到发生异常, e = ", e);
+                    }
+                });
+                return ApiResponse.buildSuccess();
+            }
+            // 非配置中心进行签到的时间段 直接return
+            return null;
+        } catch (Exception e) {
+            log.error("UserInfoController.executeAllUser | 执行全量用户签到时出现异常, e = ", e);
             return ApiResponse.buildFailure();
         }
     }

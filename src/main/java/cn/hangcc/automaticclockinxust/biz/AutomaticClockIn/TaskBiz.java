@@ -24,7 +24,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 在这里编写类的功能描述
@@ -47,9 +50,9 @@ public class TaskBiz {
         request.setHeader("cookie", msg.getCookie());
         String jsonStr = EntityUtils.toString(client.execute(request).getEntity(), StandardCharsets.UTF_8);
         // 判断是否已经打过卡了 如果已经打过的话 直接消费掉
-        if (checkHasBeenPerformed(jsonStr, msg)) {
-            return true;
-        }
+//        if (checkHasBeenPerformed(jsonStr)) {
+//            return true;
+//        }
         try {
             // 获取到的上次进行打卡的所有数据
             JSONObject prePostData = JSONObject.parseObject(jsonStr).getJSONArray("list").getJSONObject(0);
@@ -73,16 +76,15 @@ public class TaskBiz {
     /**
      * 接到的消息 判断该时段该用户是否已经打过卡了
      * @param jsonStr 根据用户的学号进行请求上次打卡获取到的数据
-     * @param msg kafka接到的消息
      * @return true或者false true代表打过，false代表没打
      */
-    private boolean checkHasBeenPerformed(String jsonStr, ClockInMsgModel msg) throws IOException {
+    private boolean checkHasBeenPerformed(String jsonStr) {
         LocalDateTime lastDateTime = getLastTime(jsonStr);
         // 当前日期yyyyMMdd
-        String nowDate = LocalDate.now().format(LocalDateUtils.INT_DATE_FORMATTER);
+        int nowDate = LocalDateUtils.getInt(LocalDate.now());
         // 上次打卡日期yyyyMMdd
-        String lastDate = lastDateTime.toLocalDate().format(LocalDateUtils.INT_DATE_FORMATTER);
-        return nowDate.equals(lastDate);
+        int lastDate = LocalDateUtils.getInt(lastDateTime.toLocalDate());
+        return nowDate == lastDate;
     }
 
     /**
@@ -108,7 +110,7 @@ public class TaskBiz {
         for (String key : prePostData.keySet()) {
             clockInData.put(key.toLowerCase(), prePostData.getString(key));
         }
-        Set<String> clockInDateSets = clockInData.keySet();
+        List<String> clockInDateSets = new ArrayList<>(clockInData.keySet());
         for (String key : clockInDateSets) {
             if (key.equals(key.toUpperCase())) {
                 clockInData.remove(key);
