@@ -26,8 +26,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 在这里编写类的功能描述
@@ -50,9 +48,9 @@ public class TaskBiz {
         request.setHeader("cookie", msg.getCookie());
         String jsonStr = EntityUtils.toString(client.execute(request).getEntity(), StandardCharsets.UTF_8);
         // 判断是否已经打过卡了 如果已经打过的话 直接消费掉
-//        if (checkHasBeenPerformed(jsonStr)) {
-//            return true;
-//        }
+        if (checkHasBeenPerformed(jsonStr)) {
+            return true;
+        }
         try {
             // 获取到的上次进行打卡的所有数据
             JSONObject prePostData = JSONObject.parseObject(jsonStr).getJSONArray("list").getJSONObject(0);
