@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cn.hangcc</groupId>
-    <artifactId>automatic-punch-xust</artifactId>
+    <artifactId>automatic-clock-in-xust</artifactId>
     <version>1.0.0</version>
-    <name>automatic-punch-xust</name>
+    <name>automatic-clock-in-xust</name>
     <description>西安科技大学自动打卡</description>
     <properties>
         <java.version>1.8</java.version>
