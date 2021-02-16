@@ -44,4 +44,10 @@ public interface UserInfoService {
      * @return 用户集合
      */
     List<UserInfoModel> listEveningClockInUser();
+
+    /**
+     * 查询出所有用户
+     * @return 所有用户的集合
+     */
+    List<UserInfoModel> listAllUser();
 }

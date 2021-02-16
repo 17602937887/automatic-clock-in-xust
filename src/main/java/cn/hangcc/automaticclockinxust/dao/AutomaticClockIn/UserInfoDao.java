@@ -48,4 +48,10 @@ public interface UserInfoDao {
      * @return 用户集合
      */
     List<UserInfoDO> listEveningClockInUser();
+
+    /**
+     * 查询所有的用户集合
+     * @return 用户集合
+     */
+    List<UserInfoDO> listAllUser();
 }

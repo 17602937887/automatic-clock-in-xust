@@ -16,8 +16,8 @@ import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.UserInfoMode
 import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.ConfigService;
 import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.UserInfoService;
 import cn.hangcc.automaticclockinxust.service.converter.AutomaticPunch.UserInfoModelConverter;
+import cn.hangcc.automaticclockinxust.task.AutomaticClockIn.UserInfoUpdateTask;
 import com.alibaba.fastjson.JSON;
-import com.google.gson.JsonSerializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,6 +60,9 @@ public class UserInfoController {
 
     @Resource
     private ConfigService configService;
+
+    @Resource
+    private UserInfoUpdateTask userInfoUpdateTask;
 
     /**
      * 用户添加任务的请求接口
