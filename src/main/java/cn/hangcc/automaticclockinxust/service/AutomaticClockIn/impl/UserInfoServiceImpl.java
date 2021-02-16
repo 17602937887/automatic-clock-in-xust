@@ -77,4 +77,12 @@ public class UserInfoServiceImpl implements UserInfoService {
                 .map(UserInfoModelConverter::convertToUserInfoModel)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<UserInfoModel> listAllUser() {
+        return userInfoDao.listAllUser()
+                .stream()
+                .map(UserInfoModelConverter::convertToUserInfoModel)
+                .collect(Collectors.toList());
+    }
 }

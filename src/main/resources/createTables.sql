@@ -3,6 +3,9 @@
 # 库名
 create database if not exists automatic_clock_in_xust;
 
+# 选择该库
+use automatic_clock_in_xust;
+
 # 用户信息表
 create table if not exists automatic_clock_in_user_info_table(
     `id` int(11) primary key auto_increment comment '主键',

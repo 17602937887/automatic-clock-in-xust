@@ -102,5 +102,9 @@
         from automatic_clock_in_user_info_table
         where status in (2, 3)
     </select>
+    <select id="listAllUser" resultMap="resultMap">
+        select <include refid="all_column"/>
+        from automatic_clock_in_user_info_table
+    </select>
 
 </mapper>
