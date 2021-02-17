@@ -1,7 +1,7 @@
 package cn.hangcc.automaticclockinxust.dao.AutomaticClockIn;
 
 import cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.UserInfoDO;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

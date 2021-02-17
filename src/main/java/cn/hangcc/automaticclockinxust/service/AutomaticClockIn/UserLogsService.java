@@ -5,9 +5,6 @@
  */
 package cn.hangcc.automaticclockinxust.service.AutomaticClockIn;
 
-import io.lettuce.core.dynamic.annotation.Param;
-import org.springframework.stereotype.Repository;
-
 /**
  * 在这里编写类的功能描述
  *

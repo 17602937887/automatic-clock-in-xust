@@ -6,11 +6,9 @@
 package cn.hangcc.automaticclockinxust.service.AutomaticClockIn.impl;
 
 import cn.hangcc.automaticclockinxust.dao.AutomaticClockIn.ConfigDao;
-import cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.ConfigDO;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ConfigModel;
 import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.ConfigService;
 import cn.hangcc.automaticclockinxust.service.converter.AutomaticPunch.ConfigModelConverter;
-import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -20,6 +20,7 @@ import cn.hangcc.automaticclockinxust.task.AutomaticClockIn.UserInfoUpdateTask;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,9 +91,16 @@ public class UserInfoController {
             setUserAttribute(userInfoModel, url, schoolId, email, status);
             userInfoService.insert(userInfoModel);
             // 异步发送短信告知用户注册成功
-            kafkaTemplate.send(AutomaticClockInConstants.KAFKA_SEND_REGISTER_SUCCESS_SMS_TOPIC, JSON.toJSON(userInfoModel).toString());
+            String smsMsg = JSON.toJSON(userInfoModel).toString();
+            ListenableFuture future = kafkaTemplate.send(AutomaticClockInConstants.KAFKA_SEND_REGISTER_SUCCESS_SMS_TOPIC, smsMsg);
+            String time = LocalDateUtils.getNowTime();
+            future.addCallback(o -> log.info("kafka发送短信消息发送成功,time:{}, smsMsg:{}", time, smsMsg),
+                    throwable -> log.error("kafka发送短信消息发送失败,time:{}, smsMsg:{}", time, smsMsg));
             // 扔到mq里面 进行一次打卡
-            kafkaTemplate.send(AutomaticClockInConstants.KAFKA_CLOCK_IN_INFO_TOPIC, JSON.toJSON(UserInfoModelConverter.convertToClockInMsgModel(userInfoModel)).toString());
+            String clockInMsg = JSON.toJSON(UserInfoModelConverter.convertToClockInMsgModel(userInfoModel)).toString();
+            future = kafkaTemplate.send(AutomaticClockInConstants.KAFKA_CLOCK_IN_INFO_TOPIC, clockInMsg);
+            future.addCallback(o -> log.info("kafka发送签到消息发送成功,time:{}, clockInMsg:{}", time, clockInMsg),
+                    throwable -> log.error("kafka发送签到消息发送失败,time:{}, clockInMsg:{}", time, clockInMsg));
             return ApiResponse.buildSuccess();
         } catch (Exception e) {
             log.error("UserInfoController.addUser | 用户添加任务时出现异常, url:{}, e=", url, e);

@@ -5,9 +5,8 @@
  */
 package cn.hangcc.automaticclockinxust.service.AutomaticClockIn;
 
-import cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.ConfigDO;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ConfigModel;
-import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 在这里编写类的功能描述
@@ -21,5 +20,5 @@ public interface ConfigService {
      * @param key 键
      * @return 值
      */
-    ConfigModel query(String key);
+    ConfigModel query(@Param("key") String key);
 }

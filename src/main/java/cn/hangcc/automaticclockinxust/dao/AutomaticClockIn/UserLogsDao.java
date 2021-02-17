@@ -5,7 +5,7 @@
  */
 package cn.hangcc.automaticclockinxust.dao.AutomaticClockIn;
 
-import io.lettuce.core.dynamic.annotation.Param;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -24,5 +24,5 @@ public interface UserLogsDao {
      * @param info 存储信息
      * @return 影响行数
      */
-    int insert(@Param("schoolId") Long schoolId,@Param("name") String name,@Param("info") String info);
+    int insert(@Param("schoolId") Long schoolId, @Param("name") String name, @Param("info") String info);
 }
