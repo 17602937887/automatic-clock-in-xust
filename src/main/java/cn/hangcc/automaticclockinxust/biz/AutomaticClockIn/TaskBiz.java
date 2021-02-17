@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +83,12 @@ public class TaskBiz {
         int nowDate = LocalDateUtils.getInt(LocalDate.now());
         // 上次打卡日期yyyyMMdd
         int lastDate = LocalDateUtils.getInt(lastDateTime.toLocalDate());
-        return nowDate == lastDate;
+        int lastStatus = getLastStatus(jsonStr);
+        // 当前是早上
+        if (LocalTime.now().isBefore(LocalDateUtils.getLocalTime(AutomaticClockInConstants.TIME_SEPARATION_POINT))) {
+            return (nowDate == lastDate && lastStatus == 1);
+        }
+        return (nowDate == lastDate && lastStatus == 0);
     }
 
     /**
@@ -93,6 +99,15 @@ public class TaskBiz {
     private LocalDateTime getLastTime(String jsonStr) {
         String str = JSONObject.parseObject(jsonStr).getJSONArray("list").getJSONObject(0).getString("TBSJ");
         return LocalDateTime.parse(str, LocalDateUtils.LEGACY_DATE_TIME_FORMATTER);
+    }
+
+    /**
+     * 获取上次打卡的状态 若为1 则代表早上打卡 若为0则为晚上打卡
+     * @param jsonStr
+     * @return
+     */
+    private int getLastStatus(String jsonStr) {
+        return Integer.parseInt(JSONObject.parseObject(jsonStr).getJSONArray("list").getJSONObject(0).getString("JDLX"));
     }
 
     /**

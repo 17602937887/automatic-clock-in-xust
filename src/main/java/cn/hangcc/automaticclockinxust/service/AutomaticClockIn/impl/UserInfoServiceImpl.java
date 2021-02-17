@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * @author chenhang
  * @since 2021-02-05 18:44:46
  */
-@Service
+@Service("userInfoService")
 public class UserInfoServiceImpl implements UserInfoService {
     @Resource
     private UserInfoDao userInfoDao;

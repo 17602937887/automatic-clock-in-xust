@@ -17,7 +17,7 @@ spring:
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   # 数据库连接配置
   datasource:
-    url: jdbc:mysql://localhost:3306/automatic_clock_in_xust?useUnicode=true&characterEncoding=UTF-8&useSSL=false #服务器ip mysql端口
+    url: jdbc:mysql://localhost:3306/automatic_clock_in_xust?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: Chh980929
     driver-class-name: com.mysql.cj.jdbc.Driver

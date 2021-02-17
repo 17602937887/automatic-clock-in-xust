@@ -1,7 +1,7 @@
 # 项目需要的库、表、等结构的sql语句
 
 # 库名
-create database if not exists automatic_clock_in_xust;
+create database if not exists automatic_clock_in_xust DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 # 选择该库
 use automatic_clock_in_xust;

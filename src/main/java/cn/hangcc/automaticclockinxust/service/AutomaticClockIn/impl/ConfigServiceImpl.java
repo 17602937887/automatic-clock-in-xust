@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  * @author chenhang
  * @created 2021/2/11
  */
-@Service
+@Service("configService")
 public class ConfigServiceImpl implements ConfigService {
 
     @Resource

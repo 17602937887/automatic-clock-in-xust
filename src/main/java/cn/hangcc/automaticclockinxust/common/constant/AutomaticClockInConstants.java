@@ -89,4 +89,9 @@ public class AutomaticClockInConstants {
      * 保证配置中心起始的时间也会进行签到操作
      */
     public static final long KAFKA_SLEEP_TIME = 2000;
+
+    /**
+     * 早上与晚上的时间分隔点
+     */
+    public static final String TIME_SEPARATION_POINT = "14:00:00";
 }
