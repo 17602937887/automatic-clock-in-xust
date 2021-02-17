@@ -112,7 +112,7 @@ public class UserInfoController {
         }
     }
 
-    @GetMapping("executeAll.json")
+    @GetMapping("/executeAll.json")
     public ApiResponse executeAllUser() {
         try {
             // 获取当前时间

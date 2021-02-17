@@ -124,6 +124,6 @@ public class ClockInMsgProducer {
         long diff = Duration.between(startTime, endTime).toMinutes();
         // 根据当前时间与用户学号 计算一个hash值。 因为日期始终在变化 所以可以达到用户签到时间随机的效果
         long hashVal =  (timeVal * 31 + userInfoModel.getSchoolId()) % diff;
-        return hashVal == Duration.between(executeTime.toLocalTime(), startTime).toMinutes();
+        return hashVal == Math.abs(Duration.between(executeTime.toLocalTime(), startTime).toMinutes());
     }
 }
