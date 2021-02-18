@@ -42,6 +42,7 @@ public class ClockInMsgConsumer {
         // kafka接受到的签到信息
         ClockInMsgModel msg = JSON.parseObject(record.value().toString(), ClockInMsgModel.class);
         try {
+            log.info("接到kafka生产的签到消息ClockInMsgModel:{}", msg);
             for (int i = 0; i < AutomaticClockInConstants.CLOCK_IN_FAILED_RETRY_COUNT; i++) {
                 if (taskBiz.executeTask(msg)) {
                     userLogsService.insert(msg.getSchoolId(), msg.getName(), AutomaticClockInConstants.CLOCK_IN_SUCCESS_CONTENT);
