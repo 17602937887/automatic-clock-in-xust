@@ -34,6 +34,7 @@ public class SmsMsgConsumer {
     public void listenRegisterSuccess(ConsumerRecord<?, ?> record) {
         try {
             UserInfoModel value = JSON.parseObject(record.value().toString(), UserInfoModel.class);
+            log.info("接到kafka生产的发送注册成功消息userInfoModel:{}", value);
             // 发送注册成功的短信消息
             aliSmsBiz.sendRegisterSuccessMsg(value);
         } catch (Exception e) {
