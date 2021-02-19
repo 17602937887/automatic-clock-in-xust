@@ -22,10 +22,6 @@ public class ClockInMsgModel implements Serializable {
      */
     private Long schoolId;
     /**
-     * 用户的cookie
-     */
-    private String cookie;
-    /**
      * 用户名字
      */
     private String name;
@@ -37,4 +33,8 @@ public class ClockInMsgModel implements Serializable {
      * 当前签到的时间段 1:上午打卡 2.晚上打卡
      */
     private Integer status;
+    /**
+     * 用户提交的Url地址
+     */
+    private String url;
 }
