@@ -12,6 +12,7 @@ import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.UserInfoMode
 import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.ConfigService;
 import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.UserInfoService;
 import cn.hangcc.automaticclockinxust.service.converter.AutomaticPunch.UserInfoModelConverter;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -52,7 +53,7 @@ public class ClockInMsgProducer {
         if (null != clockInMsgModels) {
             log.info("真正执行的clockInMsgModels:{}", clockInMsgModels);
             for (ClockInMsgModel msg : clockInMsgModels) {
-                ListenableFuture future= kafkaTemplate.send(AutomaticClockInConstants.KAFKA_CLOCK_IN_INFO_TOPIC, msg);
+                ListenableFuture future= kafkaTemplate.send(AutomaticClockInConstants.KAFKA_CLOCK_IN_INFO_TOPIC, JSON.toJSON(msg).toString());
                 String time = LocalDateUtils.getNowTime();
                 future.addCallback(o -> log.info("kafka签到消息发送成功,time:{}, msg:{}", time, msg),
                         throwable -> log.error("kafka签到消息发送失败,time:{}, msg:{} ", time, msg));

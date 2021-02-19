@@ -20,6 +20,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -38,6 +39,9 @@ import java.util.List;
 @Component
 public class TaskBiz {
 
+    @Resource
+    private UserInfoBiz userInfoBiz;
+
     /**
      * 执行打卡任务
      * @param msg kafka接到的消息
@@ -46,12 +50,13 @@ public class TaskBiz {
     public boolean executeTask(ClockInMsgModel msg) throws IOException {
         CloseableHttpClient client = HttpClientBuilder.create().build();
         HttpGet request = AutomaticClockInUtils.setHeaders(new HttpGet(AutomaticClockInConstants.REQUEST_USER_INFO_URL + msg.getSchoolId()));
-        request.setHeader("cookie", msg.getCookie());
+        String cookie = userInfoBiz.getUserCookie(msg.getUrl());
+        request.setHeader("cookie", cookie);
         String jsonStr = EntityUtils.toString(client.execute(request).getEntity(), StandardCharsets.UTF_8);
         // 判断是否已经打过卡了 如果已经打过的话 直接消费掉
-        if (checkHasBeenPerformed(jsonStr)) {
-            return true;
-        }
+//        if (checkHasBeenPerformed(jsonStr)) {
+//            return true;
+//        }
         try {
             // 获取到的上次进行打卡的所有数据
             JSONObject prePostData = JSONObject.parseObject(jsonStr).getJSONArray("list").getJSONObject(0);
@@ -60,7 +65,7 @@ public class TaskBiz {
             JSONObject postJsonData = constructPostParam(prePostData, clockInData, msg.getStatus());
             HttpPost httpPost = new HttpPost(AutomaticClockInConstants.CLOCK_IN_POST_URL);
             AutomaticClockInUtils.setHeaders(httpPost);
-            httpPost.setHeader("cookie", msg.getCookie());
+            httpPost.setHeader("cookie", cookie);
             httpPost.setHeader("Referer", String.valueOf(msg.getSchoolId()));
             StringEntity entity = new StringEntity(postJsonData.toJSONString(), "application/json", "utf-8");
             httpPost.setEntity(entity);

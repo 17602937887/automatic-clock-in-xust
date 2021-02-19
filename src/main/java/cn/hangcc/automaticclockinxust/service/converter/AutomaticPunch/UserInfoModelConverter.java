@@ -84,7 +84,7 @@ public class UserInfoModelConverter {
         UserInfoModel userInfoModel = new UserInfoModel();
 
         userInfoModel.setSchoolId(clockInMsgModel.getSchoolId());
-        userInfoModel.setCookie(clockInMsgModel.getCookie());
+        userInfoModel.setUserUrl(clockInMsgModel.getUrl());
         userInfoModel.setName(clockInMsgModel.getName());
         userInfoModel.setPhone(clockInMsgModel.getPhone());
         userInfoModel.setStatus(clockInMsgModel.getStatus());
@@ -104,7 +104,7 @@ public class UserInfoModelConverter {
         ClockInMsgModel clockInMsgModel = new ClockInMsgModel();
 
         clockInMsgModel.setSchoolId(userInfoModel.getSchoolId());
-        clockInMsgModel.setCookie(userInfoModel.getCookie());
+        clockInMsgModel.setUrl(userInfoModel.getUserUrl());
         clockInMsgModel.setName(userInfoModel.getName());
         clockInMsgModel.setPhone(userInfoModel.getPhone());
         clockInMsgModel.setStatus(userInfoModel.getStatus());
