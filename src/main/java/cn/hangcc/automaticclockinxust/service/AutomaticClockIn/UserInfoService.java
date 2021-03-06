@@ -34,6 +34,12 @@ public interface UserInfoService {
     void update(UserInfoModel userInfoModel);
 
     /**
+     * 删除数据 逻辑删除 只是设置状态为不打卡
+     * @param schoolId 用户的学号
+     */
+    void delete(Long schoolId);
+
+    /**
      * 查询所有早上需要打卡的用户
      * @return 用户集合
      */

@@ -35,6 +35,20 @@ create table if not exists automatic_clock_in_user_logs_table(
     `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+# 用户打卡日志表
+create table if not exists automatic_clock_in_sms_logs_table(
+     `id` int(11) primary key auto_increment comment '主键',
+     `phone` varchar(255) not null comment '手机号',
+     `sign_name` varchar(255) not null comment '签名',
+     `template_code` varchar(255) not null comment '模板id',
+     `template_param` varchar(255) not null comment '模板参数',
+     `result_data` varchar(255) not null comment '调用返回信息',
+     `other_info` varchar(255) not null comment '其他信息',
+     `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+     `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+     unique key idx_templateCode(`template_code`) comment '唯一索引'
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 # 系统配置表 统一配置中心
 create table if not exists automatic_clock_in_config_table(
     `id` int(11) primary key auto_increment comment '主键',
@@ -53,3 +67,5 @@ insert into automatic_clock_in_config_table(`key`, `value`) values ('morningEndT
 insert into automatic_clock_in_config_table(`key`, `value`) values ('eveningStartTime', '17:15:00');
 # 插入晚上结束签到的时间点
 insert into automatic_clock_in_config_table(`key`, `value`) values ('eveningEndTime', '18:00:00');
+# 系统出现异常时 短信通知的用户列表
+insert into automatic_clock_in_config_table(`key`, `value`) values ('exceptionMessageReceiver', '["17602937887"]');

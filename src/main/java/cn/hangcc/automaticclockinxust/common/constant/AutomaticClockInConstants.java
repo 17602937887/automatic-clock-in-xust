@@ -25,7 +25,7 @@ public class AutomaticClockInConstants {
     /**
      * kafka签到信息的topic. 此处更换为你创建的topic名称
      */
-    public static final String KAFKA_CLOCK_IN_INFO_TOPIC = "clock-in-info";
+    public static final String KAFKA_CLOCK_IN_INFO_TOPIC = "clock-in-info-topic";
 
     /**
      * kafka发送注册成功短信的topic，此处更换为你创建的topic名称
@@ -35,6 +35,10 @@ public class AutomaticClockInConstants {
      * kafka发生打卡失败短信的topic。
      */
     public static final String KAFKA_SEND_CLOCK_IN_FAILED_SMS_TOPIC = "clock-in-failed-topic";
+    /**
+     * 系统出现异常时 发送短信的topic
+     */
+    public static final String KAFKA_SEND_CLOCK_IN_EXCEPTION_SMS_TOPIC = "send-exception-sms-topic";
     /**
      * 阿里云accessKeyId. 此处更换为你在阿里云accessKeyId
      */
@@ -59,6 +63,11 @@ public class AutomaticClockInConstants {
      * 打卡失败后的阿里云短信服务短信模板id. 此处更改为你在阿里云的短信模板id.
      */
     public static final String ALIYUN_CLOCK_IN_FAILED_TEMPLATE_CODE = "SMS_190782739";
+
+    /**
+     * 异常信息的短信模板id
+     */
+    public static final String ALIYUN_CLOCK_IN_EXCEPTION_TEMPLATE_CODE = "SMS_212712039";
 
     /**
      * 打卡失败后 重试次数
