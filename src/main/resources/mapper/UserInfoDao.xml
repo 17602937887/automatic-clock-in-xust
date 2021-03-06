@@ -87,6 +87,10 @@
         where school_id = #{schoolId}
     </update>
 
+    <delete id="delete">
+        update automatic_clock_in_user_info_table set  status = 4 where school_id = #{schoolId}
+    </delete>
+
     <select id="query" resultMap="resultMap">
         select <include refid="all_column"/> from automatic_clock_in_user_info_table where school_id = #{schoolId}
     </select>

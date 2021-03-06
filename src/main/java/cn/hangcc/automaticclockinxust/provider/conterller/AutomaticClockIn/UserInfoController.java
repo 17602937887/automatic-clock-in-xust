@@ -8,7 +8,6 @@ package cn.hangcc.automaticclockinxust.provider.conterller.AutomaticClockIn;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.ParamCheckBiz;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.TaskBiz;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.UserInfoBiz;
-import cn.hangcc.automaticclockinxust.common.constant.AutomaticClockInConstants;
 import cn.hangcc.automaticclockinxust.common.response.ApiResponse;
 import cn.hangcc.automaticclockinxust.common.utils.LocalDateUtils;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ClockInMsgModel;
@@ -30,8 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import static cn.hangcc.automaticclockinxust.common.constant.AutomaticClockInConstants.*;
 
 /**
  * 在这里编写类的功能描述
@@ -92,31 +94,51 @@ public class UserInfoController {
             userInfoService.insert(userInfoModel);
             // 异步发送短信告知用户注册成功
             String smsMsg = JSON.toJSON(userInfoModel).toString();
-            ListenableFuture future = kafkaTemplate.send(AutomaticClockInConstants.KAFKA_SEND_REGISTER_SUCCESS_SMS_TOPIC, smsMsg);
+            ListenableFuture future = kafkaTemplate.send(KAFKA_SEND_REGISTER_SUCCESS_SMS_TOPIC, smsMsg);
             String time = LocalDateUtils.getNowTime();
             future.addCallback(o -> log.info("kafka发送短信消息发送成功,time:{}, smsMsg:{}", time, smsMsg),
                     throwable -> log.error("kafka发送短信消息发送失败,time:{}, smsMsg:{}", time, smsMsg));
             // 扔到mq里面 进行一次打卡
             String clockInMsg = JSON.toJSON(UserInfoModelConverter.convertToClockInMsgModel(userInfoModel)).toString();
-            future = kafkaTemplate.send(AutomaticClockInConstants.KAFKA_CLOCK_IN_INFO_TOPIC, clockInMsg);
+            future = kafkaTemplate.send(KAFKA_CLOCK_IN_INFO_TOPIC, clockInMsg);
             future.addCallback(o -> log.info("kafka发送签到消息发送成功,time:{}, clockInMsg:{}", time, clockInMsg),
                     throwable -> log.error("kafka发送签到消息发送失败,time:{}, clockInMsg:{}", time, clockInMsg));
             return ApiResponse.buildSuccess();
         } catch (Exception e) {
             log.error("UserInfoController.addUser | 用户添加任务时出现异常, url:{}, e=", url, e);
+            String time = LocalDateUtils.getNowTime();
+            String errorMsg = String.format("用户添加任务时出现异常:e=%s", e.getMessage().substring(0, 15));
+            notifyDev(time, errorMsg);
             return ApiResponse.buildFailure();
         }
     }
 
-    @GetMapping("/execute.json")
-    public ApiResponse execute(@RequestParam("schoolId") Long schoolId) {
+    @PostMapping("/specifyExecute.json")
+    public ApiResponse specifyExecute(@RequestParam("schoolId") Long schoolId) {
         try {
             UserInfoModel user = userInfoService.query(schoolId);
             taskBiz.executeTask(UserInfoModelConverter.convertToClockInMsgModel(user));
             return ApiResponse.buildSuccess();
         } catch (Exception e) {
             log.error("UserInfoController.execute | 手动执行单个用户签到出现异常, schoolId:{}, e = ", schoolId, e);
+            String time = LocalDateUtils.getNowTime();
+            String errorMsg = String.format("手动执行单个用户签到出现异常:e=%s", e.getMessage().substring(0, 15));
+            notifyDev(time, errorMsg);
             return ApiResponse.buildFailure("手动执行单个用户签到出现异常");
+        }
+    }
+
+    @PostMapping("/delete.json")
+    public ApiResponse delete(@RequestParam("schoolId") Long schoolId) {
+        try {
+            userInfoService.delete(schoolId);
+            return ApiResponse.buildSuccess();
+        } catch (Exception e) {
+            log.error("UserInfoController.delete | 删除单个用户出现异常, schoolId:{}, e = ", schoolId, e);
+            String time = LocalDateUtils.getNowTime();
+            String errorMsg = String.format("删除单个用户出现异常:e=%s", e.getMessage().substring(0, 15));
+            notifyDev(time, errorMsg);
+            return ApiResponse.buildFailure("删除失败");
         }
     }
 
@@ -159,6 +181,9 @@ public class UserInfoController {
             return null;
         } catch (Exception e) {
             log.error("UserInfoController.executeAllUser | 执行全量用户签到时出现异常, e = ", e);
+            String time = LocalDateUtils.getNowTime();
+            String errorMsg = String.format("执行全量用户签到时出现异常:e=%s", e.getMessage().substring(0, 15));
+            notifyDev(time, errorMsg);
             return ApiResponse.buildFailure();
         }
     }
@@ -168,5 +193,17 @@ public class UserInfoController {
         user.setSchoolId(schoolId);
         user.setEmail(email);
         user.setStatus(status);
+    }
+
+    private void notifyDev(String time, String errorMsg) {
+        // 异步发送短信告知开发者出现异常
+        Map<String, String> map = new HashMap<>();
+        map.put("time", time);
+        map.put("errorMsg", errorMsg);
+        String msg = JSON.toJSONString(map);
+        ListenableFuture future = kafkaTemplate.send(KAFKA_SEND_CLOCK_IN_EXCEPTION_SMS_TOPIC, msg);
+        String nowTime = LocalDateUtils.getNowTime();
+        future.addCallback(o -> log.info("kafka发送短信消息发送成功,time:{}, smsMsg:{}", nowTime, msg),
+                throwable -> log.error("kafka发送短信消息发送失败,time:{}, smsMsg:{}", nowTime, msg));
     }
 }

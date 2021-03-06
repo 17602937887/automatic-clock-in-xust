@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hangcc.automaticclockinxust.dao.AutomaticClockIn.SmsLogsDao">
+
+    <resultMap type="cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.SmsLogsDO" id="resultMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="signName" column="sign_name" jdbcType="VARCHAR"/>
+        <result property="templateCode" column="template_code" jdbcType="VARCHAR"/>
+        <result property="templateParam" column="template_param" jdbcType="VARCHAR"/>
+        <result property="resultData" column="result_data" jdbcType="VARCHAR"/>
+        <result property="otherData" column="other_data" jdbcType="VARCHAR"/>
+        <result property="created" column="created" jdbcType="TIMESTAMP"/>
+        <result property="updated" column="updated" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="resultMap">
+        select id,
+               phone,
+               sign_name,
+               template_code,
+               template_param,
+               result_data,
+               other_info,
+               created,
+               updated
+        from automatic_clock_in_xust.automatic_clock_in_sms_logs_table
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="resultMap">
+        select id,
+               phone,
+               sign_name,
+               template_code,
+               template_param,
+               result_data,
+               other_info,
+               created,
+               updated
+        from automatic_clock_in_xust.automatic_clock_in_sms_logs_table
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="resultMap">
+        select
+        id, phone, sign_name, template_code, template_param, result_data, other_info, created, updated
+        from automatic_clock_in_xust.automatic_clock_in_sms_logs_table
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone = #{phone}
+            </if>
+            <if test="signName != null and signName != ''">
+                and sign_name = #{signName}
+            </if>
+            <if test="templateCode != null and templateCode != ''">
+                and template_code = #{templateCode}
+            </if>
+            <if test="templateParam != null and templateParam != ''">
+                and template_param = #{templateParam}
+            </if>
+            <if test="resultData != null and resultData != ''">
+                and result_data = #{resultData}
+            </if>
+            <if test="otherInfo != null and otherInfo != ''">
+                and other_info = #{otherInfo}
+            </if>
+            <if test="created != null">
+                and created = #{created}
+            </if>
+            <if test="updated != null">
+                and updated = #{updated}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into automatic_clock_in_xust.automatic_clock_in_sms_logs_table(phone, sign_name, template_code, template_param,
+                                                                              result_data, other_info)
+        values (#{phone}, #{signName}, #{templateCode}, #{templateParam}, #{resultData}, #{otherInfo})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into automatic_clock_in_xust.automatic_clock_in_sms_logs_table(phone, sign_name, template_code, template_param,
+        result_data, other_info)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entities.phone}, #{entity.signName}, #{entity.templateCode},
+             #{entity.templateParam}, #{entity.resultData}, #{entities.otherInfo})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into automatic_clock_in_xust.automatic_clock_in_sms_logs_table(phone, sign_name, template_code, template_param,
+        result_data, other_info)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entities.phone}, #{entity.signName}, #{entity.templateCode},
+            #{entity.templateParam}, #{entity.resultData}, #{entities.otherInfo})
+        </foreach>
+        on duplicate key update
+        phone = values(phone), sign_name = values(sign_name) , template_code = values(template_code) ,
+        template_param = values(template_param), result_data = values(result_data), other_info = values(other_info)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update automatic_clock_in_xust.automatic_clock_in_sms_logs_table
+        <set>
+            <if test="signName != null and signName != ''">
+                sign_name = #{signName},
+            </if>
+            <if test="templateCode != null and templateCode != ''">
+                template_code = #{templateCode},
+            </if>
+            <if test="templateParam != null and templateParam != ''">
+                template_param = #{templateParam},
+            </if>
+            <if test="resultData != null and resultData != ''">
+                result_data = #{resultData},
+            </if>
+            <if test="created != null">
+                created = #{created},
+            </if>
+            <if test="updated != null">
+                updated = #{updated},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from automatic_clock_in_xust.automatic_clock_in_sms_logs_table
+        where id = #{id}
+    </delete>
+
+</mapper>

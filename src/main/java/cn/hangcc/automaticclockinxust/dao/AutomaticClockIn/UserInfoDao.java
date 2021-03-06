@@ -38,6 +38,12 @@ public interface UserInfoDao {
     UserInfoDO query(@Param("schoolId") Long schoolId);
 
     /**
+     * 删除用户 逻辑删除 只是设置状态为不打卡
+     * @param schoolId 用户的学号
+     */
+    void delete(@Param("schoolId") Long schoolId);
+
+    /**
      * 查询所有早上需要打卡的用户
      * @return 用户集合
      */

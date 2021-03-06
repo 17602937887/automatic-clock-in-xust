@@ -54,6 +54,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfoDao.update(UserInfoModelConverter.convertToUserInfoDO(userInfoModel));
     }
 
+    @Override
+    public void delete(Long schoolId) {
+
+    }
+
     /**
      * 查询所有早上需要打卡的用户
      * @return 用户集合
