@@ -120,7 +120,7 @@ public class AliSmsBiz {
             InetAddress localHost = InetAddress.getLocalHost();
             String ip = AutomaticClockInUtils.getHostIp();
             String hostName = localHost.getHostName();
-            smsLogsModel.setOtherData(String.format("机器IP:%s, 机器名称:%s", ip, hostName));
+            smsLogsModel.setOtherInfo(String.format("机器IP:%s, 机器名称:%s", ip, hostName));
             smsLogsService.insert(smsLogsModel);
         } catch (ClientException | UnknownHostException e) {
             log.error("短信发送失败, e = ", e);

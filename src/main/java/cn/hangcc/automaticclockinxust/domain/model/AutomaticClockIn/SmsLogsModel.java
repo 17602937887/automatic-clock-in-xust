@@ -40,7 +40,7 @@ public class SmsLogsModel implements Serializable {
     /**
      * 其他信息
      */
-    private String otherData;
+    private String otherInfo;
     /**
      * 创建时间
      */

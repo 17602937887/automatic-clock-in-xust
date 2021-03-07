@@ -35,7 +35,7 @@ create table if not exists automatic_clock_in_user_logs_table(
     `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-# 用户打卡日志表
+# 发送短信记录表
 create table if not exists automatic_clock_in_sms_logs_table(
      `id` int(11) primary key auto_increment comment '主键',
      `phone` varchar(255) not null comment '手机号',

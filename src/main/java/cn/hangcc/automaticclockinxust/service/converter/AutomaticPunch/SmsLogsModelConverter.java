@@ -22,10 +22,12 @@ public class SmsLogsModelConverter {
         SmsLogsModel smsLogsModel = new SmsLogsModel();
 
         smsLogsModel.setId(smsLogsDO.getId());
+        smsLogsModel.setPhone(smsLogsDO.getPhone());
         smsLogsModel.setSignName(smsLogsDO.getSignName());
         smsLogsModel.setTemplateCode(smsLogsDO.getTemplateCode());
         smsLogsModel.setTemplateParam(smsLogsDO.getTemplateParam());
         smsLogsModel.setResultData(smsLogsDO.getResultData());
+        smsLogsModel.setOtherInfo(smsLogsDO.getOtherInfo());
         smsLogsModel.setCreated(smsLogsDO.getCreated());
         smsLogsModel.setUpdated(smsLogsDO.getUpdated());
 
@@ -44,10 +46,12 @@ public class SmsLogsModelConverter {
         SmsLogsDO smsLogsDO = new SmsLogsDO();
 
         smsLogsDO.setId(smsLogsModel.getId());
+        smsLogsDO.setPhone(smsLogsModel.getPhone());
         smsLogsDO.setSignName(smsLogsModel.getSignName());
         smsLogsDO.setTemplateCode(smsLogsModel.getTemplateCode());
         smsLogsDO.setTemplateParam(smsLogsModel.getTemplateParam());
         smsLogsDO.setResultData(smsLogsModel.getResultData());
+        smsLogsDO.setOtherInfo(smsLogsDO.getOtherInfo());
         smsLogsDO.setCreated(smsLogsModel.getCreated());
         smsLogsDO.setUpdated(smsLogsModel.getUpdated());
 
