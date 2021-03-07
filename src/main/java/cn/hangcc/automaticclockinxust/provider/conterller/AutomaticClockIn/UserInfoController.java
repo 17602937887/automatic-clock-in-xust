@@ -113,14 +113,20 @@ public class UserInfoController {
         }
     }
 
-    @PostMapping("/specifyExecute.json")
+    @PostMapping("/specify_execute.json")
     public ApiResponse specifyExecute(@RequestParam("schoolId") Long schoolId) {
         try {
-            UserInfoModel user = userInfoService.query(schoolId);
-            taskBiz.executeTask(UserInfoModelConverter.convertToClockInMsgModel(user));
+            UserInfoModel userInfoModel = userInfoService.query(schoolId);
+            // 扔到mq里面 进行一次打卡
+            String time = LocalDateUtils.getNowTime();
+            String clockInMsg = JSON.toJSON(UserInfoModelConverter.convertToClockInMsgModel(userInfoModel)).toString();
+            ListenableFuture future = kafkaTemplate.send(KAFKA_CLOCK_IN_INFO_TOPIC, clockInMsg);
+            future.addCallback(o -> log.info("kafka发送签到消息发送成功,time:{}, clockInMsg:{}", time, clockInMsg),
+                    throwable -> log.error("kafka发送签到消息发送失败,time:{}, clockInMsg:{}", time, clockInMsg));
+            log.info("UserInfoController.specifyExecute | 手动执行单个用户签到, schoolId:{}, userModel:{}", schoolId, userInfoModel);
             return ApiResponse.buildSuccess();
         } catch (Exception e) {
-            log.error("UserInfoController.execute | 手动执行单个用户签到出现异常, schoolId:{}, e = ", schoolId, e);
+            log.error("UserInfoController.specifyExecute | 手动执行单个用户签到出现异常, schoolId:{}, e = ", schoolId, e);
             String time = LocalDateUtils.getNowTime();
             String errorMsg = String.format("手动执行单个用户签到出现异常:e=%s", e.getMessage().substring(0, 15));
             notifyDev(time, errorMsg);
@@ -132,6 +138,7 @@ public class UserInfoController {
     public ApiResponse delete(@RequestParam("schoolId") Long schoolId) {
         try {
             userInfoService.delete(schoolId);
+            log.info("UserInfoController.delete | 删除单个用户, schoolId:{}", schoolId);
             return ApiResponse.buildSuccess();
         } catch (Exception e) {
             log.error("UserInfoController.delete | 删除单个用户出现异常, schoolId:{}, e = ", schoolId, e);
@@ -142,23 +149,25 @@ public class UserInfoController {
         }
     }
 
-    @GetMapping("/executeAll.json")
+    @GetMapping("/execute_all.json")
     public ApiResponse executeAllUser() {
         try {
             // 获取当前时间
             LocalTime nowTime = LocalTime.now();
             LocalTime morningStartTime = LocalDateUtils.getLocalTime(configService.query("morningStartTime").getValue());
             LocalTime morningEndTime = LocalDateUtils.getLocalTime(configService.query("morningEndTime").getValue());
+            // 扔到mq里面 进行一次打卡
+            String time = LocalDateUtils.getNowTime();
             // 当前时刻为满足配置中心的签到时刻 全量数据进行签到
             if (nowTime.isAfter(morningStartTime) && nowTime.isBefore(morningEndTime)) {
                 List<UserInfoModel> userInfoModels = userInfoService.listMorningClockInUser();
                 List<ClockInMsgModel> clockInMsgModels = userInfoModels.stream().map(UserInfoModelConverter::convertToClockInMsgModel).collect(Collectors.toList());
                 clockInMsgModels.forEach(msg -> {
-                    try {
-                        taskBiz.executeTask(msg);
-                    } catch (IOException e) {
-                        log.error("执行用户签到发生异常, e = ", e);
-                    }
+                    String clockInMsg = JSON.toJSON(clockInMsgModels).toString();
+                    ListenableFuture future = kafkaTemplate.send(KAFKA_CLOCK_IN_INFO_TOPIC, clockInMsg);
+                    future.addCallback(o -> log.info("kafka发送签到消息发送成功,time:{}, clockInMsg:{}", time, clockInMsg),
+                            throwable -> log.error("kafka发送签到消息发送失败,time:{}, clockInMsg:{}", time, clockInMsg));
+                    log.info("全量用户签到: userModel:{}", msg);
                 });
                 return ApiResponse.buildSuccess();
             }
@@ -169,11 +178,11 @@ public class UserInfoController {
                 List<UserInfoModel> userInfoModels = userInfoService.listEveningClockInUser();
                 List<ClockInMsgModel> clockInMsgModels = userInfoModels.stream().map(UserInfoModelConverter::convertToClockInMsgModel).collect(Collectors.toList());
                 clockInMsgModels.forEach(msg -> {
-                    try {
-                        taskBiz.executeTask(msg);
-                    } catch (IOException e) {
-                        log.error("执行用户签到发生异常, e = ", e);
-                    }
+                    String clockInMsg = JSON.toJSON(clockInMsgModels).toString();
+                    ListenableFuture future = kafkaTemplate.send(KAFKA_CLOCK_IN_INFO_TOPIC, clockInMsg);
+                    future.addCallback(o -> log.info("kafka发送签到消息发送成功,time:{}, clockInMsg:{}", time, clockInMsg),
+                            throwable -> log.error("kafka发送签到消息发送失败,time:{}, clockInMsg:{}", time, clockInMsg));
+                    log.info("全量用户签到: userModel:{}", msg);
                 });
                 return ApiResponse.buildSuccess();
             }

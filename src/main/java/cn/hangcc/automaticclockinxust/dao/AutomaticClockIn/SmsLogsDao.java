@@ -2,6 +2,7 @@ package cn.hangcc.automaticclockinxust.dao.AutomaticClockIn;
 
 import cn.hangcc.automaticclockinxust.domain.dto.AutomaticClockIn.SmsLogsDO;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @author chenhang
  * @since 2021-03-06 20:16:55
  */
+@Repository
 public interface SmsLogsDao {
 
     /**

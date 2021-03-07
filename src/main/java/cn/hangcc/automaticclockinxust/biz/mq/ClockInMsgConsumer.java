@@ -8,6 +8,7 @@ package cn.hangcc.automaticclockinxust.biz.mq;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.AliSmsBiz;
 import cn.hangcc.automaticclockinxust.biz.AutomaticClockIn.TaskBiz;
 import cn.hangcc.automaticclockinxust.common.constant.AutomaticClockInConstants;
+import cn.hangcc.automaticclockinxust.common.utils.AutomaticClockInUtils;
 import cn.hangcc.automaticclockinxust.common.utils.LocalDateUtils;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ClockInMsgModel;
 import cn.hangcc.automaticclockinxust.service.AutomaticClockIn.UserLogsService;
@@ -57,9 +58,9 @@ public class ClockInMsgConsumer {
         try {
             localHost = InetAddress.getLocalHost();
             if (localHost != null) {
-                ip = localHost.getHostAddress();
+                ip = AutomaticClockInUtils.getHostIp();
                 hostName = localHost.getHostName();
-                ipAndHostName = String.format("签到机器信息:ip{%s},hostName:{%s}", ip, hostName);
+                ipAndHostName = String.format(" | 签到机器信息:ip{%s},hostName:{%s}", ip, hostName);
             }
         } catch (UnknownHostException e) {
             ipAndHostName = "机器信息获取失败";
