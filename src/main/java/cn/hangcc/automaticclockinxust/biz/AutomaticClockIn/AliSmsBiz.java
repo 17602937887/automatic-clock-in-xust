@@ -6,6 +6,7 @@
 package cn.hangcc.automaticclockinxust.biz.AutomaticClockIn;
 
 import cn.hangcc.automaticclockinxust.common.constant.AutomaticClockInConstants;
+import cn.hangcc.automaticclockinxust.common.utils.AutomaticClockInUtils;
 import cn.hangcc.automaticclockinxust.common.utils.LocalDateUtils;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ClockInMsgModel;
 import cn.hangcc.automaticclockinxust.domain.model.AutomaticClockIn.ConfigModel;
@@ -117,7 +118,7 @@ public class AliSmsBiz {
             smsLogsModel.setTemplateParam(templateParam);
             smsLogsModel.setResultData(response.getData());
             InetAddress localHost = InetAddress.getLocalHost();
-            String ip = localHost.getHostAddress();
+            String ip = AutomaticClockInUtils.getHostIp();
             String hostName = localHost.getHostName();
             smsLogsModel.setOtherData(String.format("机器IP:%s, 机器名称:%s", ip, hostName));
             smsLogsService.insert(smsLogsModel);
