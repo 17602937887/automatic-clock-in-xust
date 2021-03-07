@@ -46,7 +46,7 @@ create table if not exists automatic_clock_in_sms_logs_table(
      `other_info` varchar(255) not null comment '其他信息',
      `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
      `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-     unique key idx_templateCode(`template_code`) comment '唯一索引'
+     key idx_templateCode(`template_code`) comment '唯一索引'
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 # 系统配置表 统一配置中心

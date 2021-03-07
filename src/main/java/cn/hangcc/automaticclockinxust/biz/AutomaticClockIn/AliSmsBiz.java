@@ -108,7 +108,7 @@ public class AliSmsBiz {
         request.putQueryParameter("PhoneNumbers", phone);
         request.putQueryParameter("SignName", signName);
         request.putQueryParameter("TemplateCode", templateCode);
-        request.putQueryParameter("TemplateParam", templateCode);
+        request.putQueryParameter("TemplateParam", templateParam);
         try {
             CommonResponse response = client.getCommonResponse(request);
             SmsLogsModel smsLogsModel = new SmsLogsModel();
