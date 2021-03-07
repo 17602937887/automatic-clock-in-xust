@@ -51,7 +51,7 @@ public class SmsLogsModelConverter {
         smsLogsDO.setTemplateCode(smsLogsModel.getTemplateCode());
         smsLogsDO.setTemplateParam(smsLogsModel.getTemplateParam());
         smsLogsDO.setResultData(smsLogsModel.getResultData());
-        smsLogsDO.setOtherInfo(smsLogsDO.getOtherInfo());
+        smsLogsDO.setOtherInfo(smsLogsModel.getOtherInfo());
         smsLogsDO.setCreated(smsLogsModel.getCreated());
         smsLogsDO.setUpdated(smsLogsModel.getUpdated());
 
