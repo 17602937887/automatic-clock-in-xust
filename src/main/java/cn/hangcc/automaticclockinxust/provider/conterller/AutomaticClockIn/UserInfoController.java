@@ -181,7 +181,7 @@ public class UserInfoController {
                 return ApiResponse.buildSuccess();
             }
             // 非配置中心进行签到的时间段 直接return
-            return null;
+            return ApiResponse.buildSuccess();
         } catch (Exception e) {
             log.error("UserInfoController.executeAllUser | 执行全量用户签到时出现异常, e = ", e);
             String time = LocalDateUtils.getNowTime();
