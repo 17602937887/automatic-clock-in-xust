@@ -56,7 +56,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public void delete(Long schoolId) {
-
+        userInfoDao.delete(schoolId);
     }
 
     /**

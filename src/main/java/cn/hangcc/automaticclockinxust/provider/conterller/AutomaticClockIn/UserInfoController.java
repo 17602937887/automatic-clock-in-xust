@@ -59,13 +59,7 @@ public class UserInfoController {
     private KafkaTemplate kafkaTemplate;
 
     @Resource
-    private TaskBiz taskBiz;
-
-    @Resource
     private ConfigService configService;
-
-    @Resource
-    private UserInfoUpdateTask userInfoUpdateTask;
 
     /**
      * 用户添加任务的请求接口

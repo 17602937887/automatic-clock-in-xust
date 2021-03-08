@@ -42,9 +42,6 @@ public class ClockInMsgConsumer {
     private UserLogsService userLogsService;
 
     @Resource
-    private KafkaTemplate kafkaTemplate;
-
-    @Resource
     private AliSmsBiz aliSmsBiz;
 
     @KafkaListener(topics = KAFKA_CLOCK_IN_INFO_TOPIC)

@@ -94,7 +94,6 @@ public class ClockInMsgProducer {
     List<ClockInMsgModel> listMorningClockInUsers(LocalDateTime executeTime, LocalTime morningStartTime, LocalTime morningEndTime) {
         // 查询出所有需要早上签到的用户
         List<UserInfoModel> userInfoModels = userInfoService.listMorningClockInUser();
-        log.info("查询出所有需要早上签到的用户,executeTime:{}, userInfoModels:{}", executeTime, userInfoModels);
         // 转为ClockInMsgModel
         List<ClockInMsgModel> clockInMsgModels = userInfoModels.stream().map(UserInfoModelConverter::convertToClockInMsgModel).collect(Collectors.toList());
         return clockInMsgModels.stream()
@@ -105,7 +104,6 @@ public class ClockInMsgProducer {
     List<ClockInMsgModel> listEveningClockInUsers(LocalDateTime executeTime, LocalTime eveningStartTime, LocalTime eveningEndTime) {
         // 查询出所有需要晚上签到的用户
         List<UserInfoModel> userInfoModels = userInfoService.listEveningClockInUser();
-        log.info("查询出所有需要晚上签到的用户, executeTime:{}, userInfoModels:{}", executeTime, userInfoModels);
         // 转为ClockInMsgModel
         List<ClockInMsgModel> clockInMsgModels = userInfoModels.stream().map(UserInfoModelConverter::convertToClockInMsgModel).collect(Collectors.toList());
         return clockInMsgModels.stream()
@@ -128,7 +126,6 @@ public class ClockInMsgProducer {
         long diff = Duration.between(startTime, endTime).toMinutes();
         // 根据当前时间与用户学号 计算一个hash值。 因为日期始终在变化 所以可以达到用户签到时间随机的效果
         long clockInMinutes =  (timeVal + userInfoModel.getSchoolId()) % diff;
-        log.info("哈希随机,userInfoModel:{}, executeTime:{} clockInMinutes:{}, diffVal:{}", userInfoModel, executeTime, clockInMinutes, Math.abs(Duration.between(executeTime.toLocalTime(), startTime).toMinutes()));
         return clockInMinutes == Math.abs(Duration.between(executeTime.toLocalTime(), startTime).toMinutes());
     }
 }
